@@ -50,29 +50,45 @@ namespace learningWindowsForms
         {
             panel.Controls.Clear();
 
-            int iterations = parameters.Count;
-
-            for(int i = 0; i < iterations; i++)
-            {
-
-            }
+            int verticalSpaceLabel = 35;
+            int verticalPaceTexbox = 32;
 
             foreach (var item in parameters)
             {
+                if (parameters.First() == item)
+                {
+                    Label firstLabel = new Label();
+                    firstLabel.Location = new Point(3, 9);
+                    firstLabel.Size = new Size(80, 13);
+                    firstLabel.Name = item;
+                    firstLabel.Text = item;
+                    panel.Controls.Add(firstLabel);
+
+                    TextBox firstTextbox = new TextBox();
+                    firstTextbox.Location = new System.Drawing.Point(99, 6);
+                    firstTextbox.Size = new System.Drawing.Size(99, 20);
+                    firstTextbox.Name = "textbox_" + item;
+                    panel.Controls.Add(firstTextbox);
+
+                    continue;
+                }
+
                 Label label = new Label();
                 int labelCount = panel.Controls.OfType<Label>().ToList().Count;
-                label.Location = new Point(3, (25 * labelCount) + 5);
+                label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
                 label.Size = new Size(77, 13);
                 label.Name = item;
                 label.Text = item;
                 panel.Controls.Add(label);
+                verticalSpaceLabel += 26;
 
                 TextBox textbox = new TextBox();
                 int textBxCount = panel.Controls.OfType<TextBox>().ToList().Count;
-                textbox.Location = new System.Drawing.Point(98, (25 * textBxCount) + 3);
-                textbox.Size = new System.Drawing.Size(100, 20);
+                textbox.Location = new System.Drawing.Point(99, verticalPaceTexbox); // (25 * textBxCount) + 3);
+                textbox.Size = new System.Drawing.Size(99, 20);
                 textbox.Name = "textbox_" + item;
                 panel.Controls.Add(textbox);
+                verticalPaceTexbox += 26;
 
             }
         }
