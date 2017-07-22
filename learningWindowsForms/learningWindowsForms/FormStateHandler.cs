@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using learningWindowsForms.Interfaces;
 using System.Drawing;
 using learningWindowsForms.Models;
+using System.Net;
+
 namespace learningWindowsForms
 {
     public class FormStateHandler
@@ -45,6 +47,18 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
+
+        public void SendRequest(Panel parameterPanel, string companyLoginID, string username, string password, string webService, string uri)
+        {
+            var parameters = parameterPanel.Controls.OfType<TextBox>().Select(t => new Parameter(t.Name, t.Text)).ToList();
+
+
+            StringBuilder sb = new StringBuilder();
+            string urlUri = @"https://ws.xataxrs.com" + webService + uri;
+            //string queryString = string.Join()
+            
+            // I think our model will need to be more complexe to account for all the variations in query strings
+        }
 
         public void CreateForm(List<string> parameters, Panel panel)
         {

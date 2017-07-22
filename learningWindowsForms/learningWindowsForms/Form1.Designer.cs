@@ -37,6 +37,8 @@
             this.label_webService = new System.Windows.Forms.Label();
             this.comboBox_webService = new System.Windows.Forms.ComboBox();
             this.parameterPanel = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.limitBox = new System.Windows.Forms.TextBox();
             this.Limit = new System.Windows.Forms.Label();
             this.organizationIdBox = new System.Windows.Forms.TextBox();
@@ -45,8 +47,7 @@
             this.asOfDateTimeBox = new System.Windows.Forms.TextBox();
             this.label_uri = new System.Windows.Forms.Label();
             this.comboBox_uri = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button_Send = new System.Windows.Forms.Button();
             this.parameterPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +133,22 @@
             this.parameterPanel.Size = new System.Drawing.Size(211, 391);
             this.parameterPanel.TabIndex = 8;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(99, 84);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 8;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 87);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "label1";
+            // 
             // limitBox
             // 
             this.limitBox.Location = new System.Drawing.Point(99, 58);
@@ -172,7 +189,6 @@
             this.AsOfDateTime.Size = new System.Drawing.Size(76, 13);
             this.AsOfDateTime.TabIndex = 2;
             this.AsOfDateTime.Text = "AsOfDateTime";
-            this.AsOfDateTime.Click += new System.EventHandler(this.AsOfDateTime_Click);
             // 
             // asOfDateTimeBox
             // 
@@ -193,33 +209,30 @@
             // comboBox_uri
             // 
             this.comboBox_uri.FormattingEnabled = true;
-            this.comboBox_uri.Location = new System.Drawing.Point(49, 55);
+            this.comboBox_uri.Location = new System.Drawing.Point(60, 59);
             this.comboBox_uri.Name = "comboBox_uri";
-            this.comboBox_uri.Size = new System.Drawing.Size(166, 21);
+            this.comboBox_uri.Size = new System.Drawing.Size(155, 21);
             this.comboBox_uri.TabIndex = 10;
             this.comboBox_uri.SelectedIndexChanged += new System.EventHandler(this.comboBox_uri_SelectedIndexChanged);
             // 
-            // label1
+            // button_Send
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 87);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "label1";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(99, 84);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 8;
+            this.button_Send.BackColor = System.Drawing.SystemColors.Highlight;
+            this.button_Send.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_Send.Location = new System.Drawing.Point(637, 59);
+            this.button_Send.Name = "button_Send";
+            this.button_Send.Size = new System.Drawing.Size(166, 21);
+            this.button_Send.TabIndex = 11;
+            this.button_Send.Text = "Send";
+            this.button_Send.UseVisualStyleBackColor = false;
+            this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(861, 500);
+            this.Controls.Add(this.button_Send);
             this.Controls.Add(this.comboBox_uri);
             this.Controls.Add(this.label_uri);
             this.Controls.Add(this.parameterPanel);
@@ -262,6 +275,7 @@
         private System.Windows.Forms.ComboBox comboBox_uri;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button_Send;
     }
 }
 

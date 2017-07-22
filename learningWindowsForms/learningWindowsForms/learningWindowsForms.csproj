@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="FormStateHandler.cs" />
     <Compile Include="Interfaces\IRepo_WebServiceParameters.cs" />
+    <Compile Include="Models\Parameter.cs" />
     <Compile Include="Models\UriOption.cs" />
     <Compile Include="Models\WebService.cs" />
     <Compile Include="Program.cs" />

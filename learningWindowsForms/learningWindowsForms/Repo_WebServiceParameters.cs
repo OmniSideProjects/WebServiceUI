@@ -14,7 +14,7 @@ namespace learningWindowsForms
         {
             return new List<string>
                         {
-                            "/DriverWebService",
+                            "/DriverWebService.svc",
                         };
         }
 
