@@ -13,11 +13,11 @@ namespace learningWindowsForms
 {
     public partial class Form1 : Form
     {
-        private WebService _currentWebService;
+        private WebServiceRequest _currentWebService;
         private UriOption _currentUri;
 
         FormStateHandler _fsh = new FormStateHandler();
-        Repo_WebServiceParameters _repo = new Repo_WebServiceParameters();
+        Repository_WebService _repo = new Repository_WebService();
 
         public Form1()
         {
@@ -29,15 +29,24 @@ namespace learningWindowsForms
             _fsh.SetComboBoxes(comboBox_webService, comboBox_uri);
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
+            button_Send.Visible = false;
 
         }
 
         private void comboBox_webService_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedWS = (string)comboBox_webService.SelectedItem;
+
             switch (selectedWS)
             {
-                case "/DriverWebService":
+                case "--Select--":
+                    _currentWebService = null;
+                    label_uri.Visible = false;
+                    comboBox_uri.Visible = false;
+                    comboBox_uri.Items.Clear();
+                    break;
+
+                case "/DriverWebService.svc":
                     var driverWS = _fsh.GetDriverWebService();
                     _currentWebService = driverWS;
                     _fsh.SetUricomboBox(label_uri, comboBox_uri, driverWS.Uris);
@@ -45,22 +54,38 @@ namespace learningWindowsForms
             }
         }
 
+        // TODO: this method gets triggered when the form loads and the SetComboBoxes() is called. The other comboBox doesnt, why is this? Why do we need this 'if' statement.
         private void comboBox_uri_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // TODO: this method gets triggered when the form loads and the SetComboBoxes() is called. The other comboBox doesnt, why is this? Why do we need this 'if' statement.
-            if(_currentWebService != null)
+            var selection = (string)comboBox_uri.SelectedItem;
+
+            if(selection == "--Select--")
             {
-                var selection = (string)comboBox_uri.SelectedItem;
+                parameterPanel.Controls.Clear();
+                button_createRequest.Visible = false;
+                return;
+            }
+            if (_currentWebService != null)
+            {
                 var selectedUri = _currentWebService.Uris.Where(x => x.Name == selection).SingleOrDefault();
                 _currentUri = selectedUri;
                 _fsh.CreateForm(_currentUri.Parameters, parameterPanel);
+                button_createRequest.Visible = true;
             }
 
         }
 
-        private void AsOfDateTime_Click(object sender, EventArgs e)
+        private void button_createRequest_Click(object sender, EventArgs e)
         {
-
+            button_Send.Visible = true;
         }
+
+
+        private void button_Send_Click(object sender, EventArgs e)
+        {
+            //Transfere user input from each parameterPanel textbox to corresponding Uri parameters
+            // Create the method in FormStateHandler _fsh.CreateRequest(UriOption uri, string companyLoginID, string username, string password)
+        }
+
     }
 }

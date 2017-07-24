@@ -8,13 +8,13 @@ using learningWindowsForms.Models;
 
 namespace learningWindowsForms
 {
-    public class Repo_WebServiceParameters : IRepo_WebServiceParameters
+    public class Repository_WebService : IRepo_WebServiceParameters
     {
         public List<string> AvailableWebServices () 
         {
             return new List<string>
                         {
-                            "/DriverWebService",
+                            "/DriverWebService.svc",
                         };
         }
 
@@ -51,24 +51,24 @@ namespace learningWindowsForms
                         };
         }
 
-        public WebService DriverWebService()
+        public WebServiceRequest DriverWebService()
         {
             var uris = new List<UriOption>
             {
-                new UriOption("/driver/", new List<string> { "DriverID" }),
-                new UriOption("/drivers/", new List<string> {
-                                                                "OrganizationID",
-                                                                "ResourceGroupID",
-                                                                "IsActive",
-                                                                "AsOfDateTime",
-                                                                "Limit",
-                                                                "Offset",
-                                                                "OrganizationSID",
-                                                                "ResourceGroupSID",
+                new UriOption("/driver/", new List<Parameter> { new Parameter("DriverID", string.Empty, true) }),
+                new UriOption("/drivers/", new List<Parameter> {
+                                                                new Parameter("OrganizationID", string.Empty, false),
+                                                                new Parameter("ResourceGroupID", string.Empty, false),
+                                                                new Parameter("IsActive", string.Empty, false),
+                                                                new Parameter("AsOfDateTime", string.Empty, false),
+                                                                new Parameter("Limit", string.Empty, false),
+                                                                new Parameter("Offset", string.Empty, false),
+                                                                new Parameter("OrganizationSID", string.Empty, false),
+                                                                new Parameter("ResourceGroupSID", string.Empty, false)
                                                              })
             };
 
-            var driverWS = new WebService("Driver Web Service", uris);
+            var driverWS = new WebServiceRequest("/DriverWebService.svc", uris);
 
             return driverWS;
         }

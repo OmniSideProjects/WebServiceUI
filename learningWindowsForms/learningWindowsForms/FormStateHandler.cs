@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using learningWindowsForms.Interfaces;
 using System.Drawing;
 using learningWindowsForms.Models;
+using System.Net;
+
 namespace learningWindowsForms
 {
     public class FormStateHandler
@@ -15,7 +17,7 @@ namespace learningWindowsForms
 
         public FormStateHandler()
         {
-            _repo = new Repo_WebServiceParameters();
+            _repo = new Repository_WebService();
         }
 
 
@@ -45,8 +47,23 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
+        public void CreateRequest(UriOption uri, string companyLoginID, string username, string password)
+        {
 
-        public void CreateForm(List<string> parameters, Panel panel)
+        }
+
+        public void SendRequest(Panel parameterPanel, string companyLoginID, string username, string password, string webService, string uri)
+        {
+            
+
+            StringBuilder sb = new StringBuilder();
+            string urlUri = @"https://ws.xataxrs.com" + webService + uri;
+            //string queryString = string.Join()
+            
+            // I think our model will need to be more complexe to account for all the variations in query strings
+        }
+
+        public void CreateForm(List<Parameter> parameters, Panel panel)
         {
             panel.Controls.Clear();
 
@@ -60,8 +77,8 @@ namespace learningWindowsForms
                     Label firstLabel = new Label();
                     firstLabel.Location = new Point(3, 9);
                     firstLabel.Size = new Size(80, 13);
-                    firstLabel.Name = item;
-                    firstLabel.Text = item;
+                    firstLabel.Name = item.Name;
+                    firstLabel.Text = item.Name;
                     panel.Controls.Add(firstLabel);
 
                     TextBox firstTextbox = new TextBox();
@@ -77,8 +94,8 @@ namespace learningWindowsForms
                 int labelCount = panel.Controls.OfType<Label>().ToList().Count;
                 label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
                 label.Size = new Size(77, 13);
-                label.Name = item;
-                label.Text = item;
+                label.Name = item.Name;
+                label.Text = item.Name;
                 panel.Controls.Add(label);
                 verticalSpaceLabel += 26;
 
@@ -103,7 +120,7 @@ namespace learningWindowsForms
             return _repo.GetAllDriversParameters();
         }
 
-        public WebService GetDriverWebService()
+        public WebServiceRequest GetDriverWebService()
         {
             return _repo.DriverWebService();
         }

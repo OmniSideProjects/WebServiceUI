@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace learningWindowsForms.Models
 {
-    public class UriOption
+    public class WebServiceRequest
     {
         public string Name { get; set; }
-        public List<Parameter> Parameters { get; set; }
+        public List<UriOption> Uris { get; set; }
 
-        public UriOption(string name, List<Parameter> parameters)
+        public WebServiceRequest(string name, List<UriOption> uris)
         {
             Name = name;
-            Parameters = parameters;
+            Uris = uris;
         }
     }
 }

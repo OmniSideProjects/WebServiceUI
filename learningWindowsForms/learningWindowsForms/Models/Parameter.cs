@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace learningWindowsForms.Models
 {
-    public class WebService
+    public class Parameter
     {
         public string Name { get; set; }
-        public List<UriOption> Uris { get; set; }
+        public string Value { get; set; }
+        public bool preQuery { get; set; }
 
-        public WebService(string name, List<UriOption> uris)
+        public Parameter(string name, string value, bool beforeQ)
         {
             Name = name;
-            Uris = uris;
+            Value = value;
+            preQuery = beforeQ;
         }
     }
 }
