@@ -10,11 +10,13 @@ namespace learningWindowsForms.Models
     {
         public string Name { get; set; }
         public string Value { get; set; }
+        public bool preQuery { get; set; }
 
-        public Parameter(string name, string value)
+        public Parameter(string name, string value, bool beforeQ)
         {
             Name = name;
             Value = value;
+            preQuery = beforeQ;
         }
     }
 }

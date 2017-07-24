@@ -9,9 +9,9 @@ namespace learningWindowsForms.Models
     public class UriOption
     {
         public string Name { get; set; }
-        public List<string> Parameters { get; set; }
+        public List<Parameter> Parameters { get; set; }
 
-        public UriOption(string name, List<string> parameters)
+        public UriOption(string name, List<Parameter> parameters)
         {
             Name = name;
             Parameters = parameters;

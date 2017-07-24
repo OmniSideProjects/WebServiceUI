@@ -55,10 +55,10 @@
     <Compile Include="Interfaces\IRepo_WebServiceParameters.cs" />
     <Compile Include="Models\Parameter.cs" />
     <Compile Include="Models\UriOption.cs" />
-    <Compile Include="Models\WebService.cs" />
+    <Compile Include="Models\WebServiceRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repo_WebServiceParameters.cs" />
+    <Compile Include="Repository_WebService.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -13,11 +13,11 @@ namespace learningWindowsForms
 {
     public partial class Form1 : Form
     {
-        private WebService _currentWebService;
+        private WebServiceRequest _currentWebService;
         private UriOption _currentUri;
 
         FormStateHandler _fsh = new FormStateHandler();
-        Repo_WebServiceParameters _repo = new Repo_WebServiceParameters();
+        Repository_WebService _repo = new Repository_WebService();
 
         public Form1()
         {
@@ -62,7 +62,7 @@ namespace learningWindowsForms
             if(selection == "--Select--")
             {
                 parameterPanel.Controls.Clear();
-                button_Send.Visible = false;
+                button_createRequest.Visible = false;
                 return;
             }
             if (_currentWebService != null)
@@ -70,15 +70,22 @@ namespace learningWindowsForms
                 var selectedUri = _currentWebService.Uris.Where(x => x.Name == selection).SingleOrDefault();
                 _currentUri = selectedUri;
                 _fsh.CreateForm(_currentUri.Parameters, parameterPanel);
-                button_Send.Visible = true;
+                button_createRequest.Visible = true;
             }
 
         }
 
+        private void button_createRequest_Click(object sender, EventArgs e)
+        {
+            button_Send.Visible = true;
+        }
+
+
         private void button_Send_Click(object sender, EventArgs e)
         {
-            var parameters = parameterPanel.Controls.OfType<TextBox>().Select(t => new Parameter(t.Name, t.Text)).ToList();
-           
+            //Transfere user input from each parameterPanel textbox to corresponding Uri parameters
+            // Create the method in FormStateHandler _fsh.CreateRequest(UriOption uri, string companyLoginID, string username, string password)
         }
+
     }
 }

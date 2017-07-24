@@ -13,7 +13,7 @@ namespace learningWindowsForms.Interfaces
         List<string> GetAllDriversParameters();
         List<string> GetOneDriverParameters();
         List<string> DriverUris();
-        WebService DriverWebService();
+        WebServiceRequest DriverWebService();
 
     }
 }
