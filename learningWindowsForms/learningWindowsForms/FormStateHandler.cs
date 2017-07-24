@@ -47,9 +47,11 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
-        public void CreateRequest(UriOption uri, string companyLoginID, string username, string password)
+        public string CreateRequestUrl(UriOption uri)
         {
 
+
+            return string.Empty;
         }
 
         public void SendRequest(Panel parameterPanel, string companyLoginID, string username, string password, string webService, string uri)

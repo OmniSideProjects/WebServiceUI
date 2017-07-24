@@ -77,14 +77,17 @@ namespace learningWindowsForms
 
         private void button_createRequest_Click(object sender, EventArgs e)
         {
-            button_Send.Visible = true;
+            //Transfere user input from each parameterPanel textbox to corresponding Uri parameters in _currentUri 
+            // Create the logic in FormStateHandler _fsh.CreateRequestUrl(UriOption _currentUri).
+            // This should return a string which you can then display in the textBox_Url 
+
+            //button_Send.Visible = true;
         }
 
 
         private void button_Send_Click(object sender, EventArgs e)
         {
-            //Transfere user input from each parameterPanel textbox to corresponding Uri parameters
-            // Create the method in FormStateHandler _fsh.CreateRequest(UriOption uri, string companyLoginID, string username, string password)
+
         }
 
     }
