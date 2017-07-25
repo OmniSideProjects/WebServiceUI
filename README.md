@@ -1,2 +1,2 @@
 # WebServiceUI
-A user friendly interface for web services
+A desktop application that provides a user friendly interface for web services
