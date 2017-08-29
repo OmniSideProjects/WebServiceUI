@@ -13,23 +13,32 @@ namespace learningWindowsForms
 {
     public partial class Form1 : Form
     {
-        private WebServiceRequest _currentWebService;
+        private List<Request> _allRequests;
+        private Request _currentWebService;
         private UriOption _currentUri;
-
-        FormStateHandler _fsh = new FormStateHandler();
-        Repository_WebService _repo = new Repository_WebService();
+        private FormStateHandler _fsh;
 
         public Form1()
         {
             InitializeComponent();
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _fsh.SetComboBoxes(comboBox_webService, comboBox_uri);
+            _fsh = new FormStateHandler();
+
+            _allRequests = _fsh.GetAvailableRequests();
+            _currentWebService = new Request();
+            _currentUri = new UriOption();
+
+
+            _fsh.SetComboBoxes(comboBox_webService, comboBox_uri, _allRequests);
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
             button_Send.Visible = false;
+
 
         }
 
@@ -37,21 +46,35 @@ namespace learningWindowsForms
         {
             var selectedWS = (string)comboBox_webService.SelectedItem;
 
-            switch (selectedWS)
+            if (selectedWS == "--Select--")
             {
-                case "--Select--":
-                    _currentWebService = null;
-                    label_uri.Visible = false;
-                    comboBox_uri.Visible = false;
-                    comboBox_uri.Items.Clear();
-                    break;
-
-                case "/DriverWebService.svc":
-                    var driverWS = _fsh.GetDriverWebService();
-                    _currentWebService = driverWS;
-                    _fsh.SetUricomboBox(label_uri, comboBox_uri, driverWS.Uris);
-                    break;
+                _currentWebService = null;
+                label_uri.Visible = false;
+                comboBox_uri.Visible = false;
+                comboBox_uri.Items.Clear();
             }
+            else
+            {
+                _currentWebService = _allRequests.Where(x => x.Name == selectedWS).SingleOrDefault();
+                _fsh.SetUricomboBox(label_uri, comboBox_uri, _currentWebService.UriOptions);
+
+            }
+
+            //switch (selectedWS)
+            //{
+            //    case "--Select--":
+            //        _currentWebService = null;
+            //        label_uri.Visible = false;
+            //        comboBox_uri.Visible = false;
+            //        comboBox_uri.Items.Clear();
+            //        break;
+
+            //    case "/DriverWebService.svc":
+            //        var driverWS = _fsh.GetDriverWebService();
+            //        _currentWebService = driverWS;
+            //        _fsh.SetUricomboBox(label_uri, comboBox_uri, driverWS.Uris);
+            //        break;
+            //}
         }
 
         // TODO: this method gets triggered when the form loads and the SetComboBoxes() is called. The other comboBox doesnt, why is this? Why do we need this 'if' statement.
@@ -59,16 +82,16 @@ namespace learningWindowsForms
         {
             var selection = (string)comboBox_uri.SelectedItem;
 
+
             if(selection == "--Select--")
             {
                 parameterPanel.Controls.Clear();
                 button_createRequest.Visible = false;
                 return;
             }
-            if (_currentWebService != null)
+            else
             {
-                var selectedUri = _currentWebService.Uris.Where(x => x.Name == selection).SingleOrDefault();
-                _currentUri = selectedUri;
+                _currentUri = _currentWebService.UriOptions.Where(x => x.Name == selection).SingleOrDefault();
                 _fsh.CreateForm(_currentUri.Parameters, parameterPanel);
                 button_createRequest.Visible = true;
             }

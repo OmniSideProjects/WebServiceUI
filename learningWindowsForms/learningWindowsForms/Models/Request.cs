@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace learningWindowsForms.Models
 {
-    public class UriOption
+    public class Request
     {
-        public int UriOptionID { get; set; }
+        public int RequestID { get; set; }
         public string Name { get; set; }
-        public List<Parameter> Parameters { get; set; }
+        public List<UriOption> UriOptions { get; set; }
+
 
     }
 }
