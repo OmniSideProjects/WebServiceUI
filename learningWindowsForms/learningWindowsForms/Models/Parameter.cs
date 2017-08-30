@@ -8,15 +8,11 @@ namespace learningWindowsForms.Models
 {
     public class Parameter
     {
+        public int ParameterID { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
-        public bool preQuery { get; set; }
-
-        public Parameter(string name, string value, bool beforeQ)
-        {
-            Name = name;
-            Value = value;
-            preQuery = beforeQ;
-        }
+        public bool IsRequired { get; set; }
+        public bool IsThereQuery { get; set; }
+        public bool PreQuery { get; set; }
     }
 }

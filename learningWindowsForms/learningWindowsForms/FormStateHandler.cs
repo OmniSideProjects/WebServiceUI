@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using learningWindowsForms.DAL.Repositories;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using learningWindowsForms.Interfaces;
@@ -13,22 +14,26 @@ namespace learningWindowsForms
 {
     public class FormStateHandler
     {
-        private IRepo_WebServiceParameters _repo;
+        //private IRepo_WebServiceParameters _repo;
+        private RequestRepository _repo;
 
         public FormStateHandler()
         {
-            _repo = new Repository_WebService();
+            _repo = new RequestRepository();
         }
 
+        public List<Request> GetAvailableRequests()
+        {
+            return _repo.GetAllRequestsWithUriOptionsAndParameters();
+        }
 
-        public void SetComboBoxes(ComboBox comboboxWebServices, ComboBox comboxUri)
+        public void SetComboBoxes(ComboBox comboboxWebServices, ComboBox comboxUri, List<Request> allRequests)
         {
             comboboxWebServices.Items.Insert(0, "--Select--");
             comboboxWebServices.SelectedIndex = 0;
-            var allWebServices = _repo.AvailableWebServices();
-            foreach (var item in allWebServices)
+            foreach (var item in allRequests)
             {
-                comboboxWebServices.Items.Add(item);
+                comboboxWebServices.Items.Add(item.Name);
             }
 
             comboxUri.Items.Insert(0, "--Select--");
@@ -112,32 +117,32 @@ namespace learningWindowsForms
             }
         }
 
-        public List<string> GetAvailableWebServices()
-        {
-            return _repo.AvailableWebServices();
-        }
+        //public List<string> GetAvailableWebServices()
+        //{
+        //    return _repo.AvailableWebServices();
+        //}
 
-        public List<string> GetAllDriverParameters()
-        {
-            return _repo.GetAllDriversParameters();
-        }
+        //public List<string> GetAllDriverParameters()
+        //{
+        //    return _repo.GetAllDriversParameters();
+        //}
 
-        public WebServiceRequest GetDriverWebService()
-        {
-            return _repo.DriverWebService();
-        }
+        //public Request GetDriverWebService()
+        //{
+        //    return _repo.DriverWebService();
+        //}
 
-        public void SetTextboxValue(TextBox input, CheckBox whatever)
-        {
-            if (whatever.Checked == true)
-            {
-                input.Text = "Checked";
-            }
-            else
-            {
-                input.Text = "Not Checked";
-            }
-        }
+        //public void SetTextboxValue(TextBox input, CheckBox whatever)
+        //{
+        //    if (whatever.Checked == true)
+        //    {
+        //        input.Text = "Checked";
+        //    }
+        //    else
+        //    {
+        //        input.Text = "Not Checked";
+        //    }
+        //}
 
 
     }
