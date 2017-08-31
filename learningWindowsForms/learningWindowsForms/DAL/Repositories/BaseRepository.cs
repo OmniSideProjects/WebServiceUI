@@ -8,12 +8,19 @@ namespace learningWindowsForms.DAL.Repositories
     {
         public static string DbFile
         {
-            get { return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"WebServiceUI", "Database.sqlite"); }
-        }
+            get {
+                    return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"WebServiceUI", "Database.sqlite"); }
+                }
 
         public static SQLiteConnection SimpleDbConnection()
         {
-            System.IO.Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WebServiceUI"));
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WebServiceUI");
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WebServiceUI"));
+            }
+
             return new SQLiteConnection("Data Source=" + DbFile);
         }
 

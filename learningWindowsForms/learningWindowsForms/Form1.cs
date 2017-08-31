@@ -22,23 +22,27 @@ namespace learningWindowsForms
         {
             InitializeComponent();
 
+            _allRequests = new List<Request>();
+            _currentWebService = new Request();
+            _currentUri = new UriOption();
+            _fsh = new FormStateHandler();
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _fsh = new FormStateHandler();
+
+            //_fsh = new FormStateHandler();
 
             _allRequests = _fsh.GetAvailableRequests();
-            _currentWebService = new Request();
-            _currentUri = new UriOption();
+            //_currentWebService = new Request();
+            //_currentUri = new UriOption();
 
 
             _fsh.SetComboBoxes(comboBox_webService, comboBox_uri, _allRequests);
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
             button_Send.Visible = false;
-
 
         }
 
@@ -49,13 +53,21 @@ namespace learningWindowsForms
             if (selectedWS == "--Select--")
             {
                 _currentWebService = null;
+                _currentUri = null;
                 label_uri.Visible = false;
                 comboBox_uri.Visible = false;
                 comboBox_uri.Items.Clear();
+                parameterPanel.Controls.Clear();
+                button_createRequest.Visible = false;
+
             }
             else
             {
                 _currentWebService = _allRequests.Where(x => x.Name == selectedWS).SingleOrDefault();
+                comboBox_uri.Items.Clear();
+                parameterPanel.Controls.Clear();
+                button_createRequest.Visible = false;
+
                 _fsh.SetUricomboBox(label_uri, comboBox_uri, _currentWebService.UriOptions);
 
             }

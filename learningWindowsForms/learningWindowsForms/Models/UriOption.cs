@@ -12,5 +12,9 @@ namespace learningWindowsForms.Models
         public string Name { get; set; }
         public List<Parameter> Parameters { get; set; }
 
+        public UriOption()
+        {
+            Parameters = new List<Parameter>();
+        }
     }
 }
