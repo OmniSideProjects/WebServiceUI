@@ -15,6 +15,7 @@ namespace learningWindowsForms
     public class FormStateHandler
     {
         //private IRepo_WebServiceParameters _repo;
+        //TODO: create interface for easy database swap out
         private RequestRepository _repo;
 
         public FormStateHandler()
@@ -52,22 +53,75 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
-        public string CreateRequestUrl(UriOption uri)
+        public string CreateRequestUrl(string requestName, UriOption uriOption, Panel parameterPanel)
         {
+            //TODO add ability to take in different environments (create drop down list to the left of web service drop down list
+
+            //Create IEnumerable of TextBoxes
+            IEnumerable<TextBox> textBoxes = parameterPanel.Controls.OfType<TextBox>();
+
+            //Transfer textBox values to UriOption Parameters.Value because the Parameters have properties related to how the query string is created
+            uriOption.Parameters.ForEach(param => param.Value = textBoxes.Where(tb => tb.Name == param.Name).Select(txb => txb.Text).SingleOrDefault());
+
+            //Same thing, more verbous
+            //foreach (Parameter param in uriOption.Parameters)
+            //{
+            //    param.Value = textBoxes.Where(txtBx => txtBx.Name == param.Name).Select(x => x.Text).SingleOrDefault();
+            //}
+
+
+            //UriOption may need the IsQueryString property and not the Parameter
+            //Be sure to persist any model changes to the BaseRepository Table creation and data load methods
+
+            StringBuilder sb = new StringBuilder();
+            //Environment
+            sb.Append("http://ws.xataxrs.com");
+            //Web Service
+            sb.Append(requestName);
+            //Uri
+            sb.Append(uriOption.Name);
+
+            StringBuilder queryStr = new StringBuilder();
+            foreach (Parameter param in uriOption.Parameters)
+            {
+                //If there is no query, then there is only one parameter (PreQuery=true)
+                //if (param.IsThereQuery)
+                //{
+                //    queryStr.Append("?");
+                //}
+
+                //if (param.PreQuery)
+                //{
+                //    queryStr.Insert(0, param.Value);
+                //}
+
+                //queryStr.Append(param.Name);
+                //queryStr.Append()
+                //if (param.PreQuery)
+                //{
+                //    if (!param.IsThereQuery)
+                //    {
+                //        queryStr.Append(param.Value);
+                //        break;
+                //    }
+                //    queryStr.Append(param.Value);
+                //    queryStr.Append("?");
+                //}
+
+            }
 
 
             return string.Empty;
         }
 
-        public void SendRequest(Panel parameterPanel, string companyLoginID, string username, string password, string webService, string uri)
+        public void SendRequest(string requestName, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
         {
-            
+            string url = CreateRequestUrl(requestName, uriOption, parameterPanel);
 
-            StringBuilder sb = new StringBuilder();
-            string urlUri = @"https://ws.xataxrs.com" + webService + uri;
-            //string queryString = string.Join()
+            //Create request with credentials, password, return type (JSON or XML)
+
+            // Call method to display response data (needs to be made)
             
-            // I think our model will need to be more complexe to account for all the variations in query strings
         }
 
         public void CreateForm(List<Parameter> parameters, Panel panel)
@@ -91,7 +145,7 @@ namespace learningWindowsForms
                     TextBox firstTextbox = new TextBox();
                     firstTextbox.Location = new System.Drawing.Point(99, 6);
                     firstTextbox.Size = new System.Drawing.Size(99, 20);
-                    firstTextbox.Name = "textbox_" + item;
+                    firstTextbox.Name = item.Name;
                     panel.Controls.Add(firstTextbox);
 
                     continue;
@@ -110,13 +164,14 @@ namespace learningWindowsForms
                 int textBxCount = panel.Controls.OfType<TextBox>().ToList().Count;
                 textbox.Location = new System.Drawing.Point(99, verticalPaceTexbox); // (25 * textBxCount) + 3);
                 textbox.Size = new System.Drawing.Size(99, 20);
-                textbox.Name = "textbox_" + item;
+                textbox.Name = item.Name;
                 panel.Controls.Add(textbox);
                 verticalPaceTexbox += 26;
 
             }
         }
 
+        #region Old repo access (Repository_WebService)
         //public List<string> GetAvailableWebServices()
         //{
         //    return _repo.AvailableWebServices();
@@ -143,7 +198,6 @@ namespace learningWindowsForms
         //        input.Text = "Not Checked";
         //    }
         //}
-
-
+        #endregion
     }
 }
