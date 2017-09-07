@@ -142,9 +142,9 @@
             // 
             this.button_Send.BackColor = System.Drawing.SystemColors.Highlight;
             this.button_Send.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_Send.Location = new System.Drawing.Point(849, 32);
+            this.button_Send.Location = new System.Drawing.Point(805, 31);
             this.button_Send.Name = "button_Send";
-            this.button_Send.Size = new System.Drawing.Size(114, 21);
+            this.button_Send.Size = new System.Drawing.Size(158, 21);
             this.button_Send.TabIndex = 11;
             this.button_Send.Text = "Send";
             this.button_Send.UseVisualStyleBackColor = false;
@@ -155,9 +155,9 @@
             this.button_createRequest.BackColor = System.Drawing.Color.DarkOrange;
             this.button_createRequest.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_createRequest.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button_createRequest.Location = new System.Drawing.Point(729, 32);
+            this.button_createRequest.Location = new System.Drawing.Point(639, 32);
             this.button_createRequest.Name = "button_createRequest";
-            this.button_createRequest.Size = new System.Drawing.Size(114, 21);
+            this.button_createRequest.Size = new System.Drawing.Size(158, 21);
             this.button_createRequest.TabIndex = 12;
             this.button_createRequest.Text = "Create Request";
             this.button_createRequest.UseVisualStyleBackColor = false;
