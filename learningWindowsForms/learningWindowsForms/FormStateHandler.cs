@@ -28,8 +28,15 @@ namespace learningWindowsForms
             return _repo.GetAllRequestsWithUriOptionsAndParameters();
         }
 
-        public void SetComboBoxes(ComboBox comboboxWebServices, ComboBox comboxUri, List<Request> allRequests)
+        public void SetComboBoxes(ComboBox comboBoxEnvironments, ComboBox comboboxWebServices, ComboBox comboxUri, List<Request> allRequests)
         {
+            //Environments
+            comboBoxEnvironments.Items.Insert(0, "https://ws.xataxrs.com"); //production
+            comboBoxEnvironments.Items.Insert(1, "https://a1ws.xataxrs.com"); // alpha
+            comboBoxEnvironments.SelectedIndex = 0; // defaults to production
+
+
+            //Web Services
             comboboxWebServices.Items.Insert(0, "--Select--");
             comboboxWebServices.SelectedIndex = 0;
             foreach (var item in allRequests)
@@ -37,15 +44,16 @@ namespace learningWindowsForms
                 comboboxWebServices.Items.Add(item.Name);
             }
 
+            //Set initial values of uri combo box
             comboxUri.Items.Insert(0, "--Select--");
             comboxUri.SelectedIndex = 0;
         }
 
         public void SetUricomboBox(Label uriLabel, ComboBox combox_uri, List<UriOption> selections)
         {
-            //combox_uri.Items.Insert(0, "--Select--");
-            //combox_uri.SelectedIndex = 0;
-            foreach(var item in selections)
+            combox_uri.Items.Insert(0, "--Select--");
+            combox_uri.SelectedIndex = 0;
+            foreach (var item in selections)
             {
                 combox_uri.Items.Add(item.Name);
             }
@@ -53,7 +61,7 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
-        public string CreateRequestUrl(string requestName, UriOption uriOption, Panel parameterPanel)
+        public string CreateRequestUrl(string environment, string webService, UriOption uriOption, Panel parameterPanel)
         {
             //TODO add ability to take in different environments (create drop down list to the left of web service drop down list
 
@@ -75,9 +83,9 @@ namespace learningWindowsForms
 
             StringBuilder sb = new StringBuilder();
             //Environment
-            sb.Append("http://ws.xataxrs.com");
+            sb.Append(environment);
             //Web Service
-            sb.Append(requestName);
+            sb.Append(webService);
             //Uri
             sb.Append(uriOption.Name);
 
@@ -114,9 +122,9 @@ namespace learningWindowsForms
             return string.Empty;
         }
 
-        public void SendRequest(string requestName, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
+        public void SendRequest(string environment, string webService, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
         {
-            string url = CreateRequestUrl(requestName, uriOption, parameterPanel);
+            string url = CreateRequestUrl(environment, webService, uriOption, parameterPanel);
 
             //Create request with credentials, password, return type (JSON or XML)
 
@@ -137,14 +145,14 @@ namespace learningWindowsForms
                 {
                     Label firstLabel = new Label();
                     firstLabel.Location = new Point(3, 9);
-                    firstLabel.Size = new Size(80, 13);
+                    firstLabel.Size = new Size(100, 20);
                     firstLabel.Name = item.Name;
                     firstLabel.Text = item.Name;
                     panel.Controls.Add(firstLabel);
 
                     TextBox firstTextbox = new TextBox();
-                    firstTextbox.Location = new System.Drawing.Point(99, 6);
-                    firstTextbox.Size = new System.Drawing.Size(99, 20);
+                    firstTextbox.Location = new Point(110, 6);
+                    firstTextbox.Size = new Size(99, 20);
                     firstTextbox.Name = item.Name;
                     panel.Controls.Add(firstTextbox);
 
@@ -154,7 +162,7 @@ namespace learningWindowsForms
                 Label label = new Label();
                 int labelCount = panel.Controls.OfType<Label>().ToList().Count;
                 label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
-                label.Size = new Size(77, 13);
+                label.Size = new Size(100, 13);
                 label.Name = item.Name;
                 label.Text = item.Name;
                 panel.Controls.Add(label);
@@ -162,8 +170,8 @@ namespace learningWindowsForms
 
                 TextBox textbox = new TextBox();
                 int textBxCount = panel.Controls.OfType<TextBox>().ToList().Count;
-                textbox.Location = new System.Drawing.Point(99, verticalPaceTexbox); // (25 * textBxCount) + 3);
-                textbox.Size = new System.Drawing.Size(99, 20);
+                textbox.Location = new Point(110, verticalPaceTexbox); // (25 * textBxCount) + 3);
+                textbox.Size = new Size(99, 20);
                 textbox.Name = item.Name;
                 panel.Controls.Add(textbox);
                 verticalPaceTexbox += 26;
