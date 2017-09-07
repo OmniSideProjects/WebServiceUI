@@ -179,6 +179,7 @@
             this.comboBox_Environments.Name = "comboBox_Environments";
             this.comboBox_Environments.Size = new System.Drawing.Size(152, 21);
             this.comboBox_Environments.TabIndex = 14;
+            this.comboBox_Environments.SelectedIndexChanged += new System.EventHandler(this.comboBox_Environments_SelectedIndexChanged);
             // 
             // label1
             // 

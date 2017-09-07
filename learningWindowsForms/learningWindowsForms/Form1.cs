@@ -17,6 +17,7 @@ namespace learningWindowsForms
         private Request _currentWebService;
         private UriOption _currentUri;
         private FormStateHandler _fsh;
+        private string _environment;
 
         public Form1()
         {
@@ -32,18 +33,19 @@ namespace learningWindowsForms
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            //_fsh = new FormStateHandler();
-
             _allRequests = _fsh.GetAvailableRequests();
-            //_currentWebService = new Request();
-            //_currentUri = new UriOption();
-
-
             _fsh.SetComboBoxes(comboBox_Environments, comboBox_webService, comboBox_uri, _allRequests);
+
+            _environment = "https://ws.xataxrs.com"; //default value: production
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
             button_Send.Visible = false;
 
+        }
+
+        private void comboBox_Environments_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _environment = (string)comboBox_Environments.SelectedItem;
         }
 
         private void comboBox_webService_SelectedIndexChanged(object sender, EventArgs e)
@@ -72,21 +74,6 @@ namespace learningWindowsForms
 
             }
 
-            //switch (selectedWS)
-            //{
-            //    case "--Select--":
-            //        _currentWebService = null;
-            //        label_uri.Visible = false;
-            //        comboBox_uri.Visible = false;
-            //        comboBox_uri.Items.Clear();
-            //        break;
-
-            //    case "/DriverWebService.svc":
-            //        var driverWS = _fsh.GetDriverWebService();
-            //        _currentWebService = driverWS;
-            //        _fsh.SetUricomboBox(label_uri, comboBox_uri, driverWS.Uris);
-            //        break;
-            //}
         }
 
         // TODO: this method gets triggered when the form loads and the SetComboBoxes() is called. The other comboBox doesnt, why is this? Why do we need this 'if' statement.
@@ -113,7 +100,7 @@ namespace learningWindowsForms
         private void button_createRequest_Click(object sender, EventArgs e)
         {
             //Transfere user input from each parameterPanel textbox to corresponding Uri parameters in _currentUri 
-            // Create the logic in FormStateHandler _fsh.CreateRequestUrl(UriOption _currentUri).
+            // Create the logic in FormStateHandler _fsh.CreateRequestUrl(string environment, string webService, UriOption uriOption, Panel parameterPanel).
             // This should return a string which you can then display in the textBox_Url 
 
             //button_Send.Visible = true;
@@ -124,6 +111,7 @@ namespace learningWindowsForms
         {
 
         }
+
 
     }
 }

@@ -31,10 +31,10 @@ namespace learningWindowsForms
         public void SetComboBoxes(ComboBox comboBoxEnvironments, ComboBox comboboxWebServices, ComboBox comboxUri, List<Request> allRequests)
         {
             //Environments
-            comboBoxEnvironments.Items.Insert(0, "--Select--");
-            comboBoxEnvironments.SelectedIndex = 0;
-            comboBoxEnvironments.Items.Add("https://ws.xataxrs.com"); //production
-            comboBoxEnvironments.Items.Add("https://a1ws.xataxrs.com"); // alpha
+            comboBoxEnvironments.Items.Insert(0, "https://ws.xataxrs.com"); //production
+            comboBoxEnvironments.Items.Insert(1, "https://a1ws.xataxrs.com"); // alpha
+            comboBoxEnvironments.SelectedIndex = 0; // defaults to production
+
 
             //Web Services
             comboboxWebServices.Items.Insert(0, "--Select--");
@@ -51,9 +51,9 @@ namespace learningWindowsForms
 
         public void SetUricomboBox(Label uriLabel, ComboBox combox_uri, List<UriOption> selections)
         {
-            //combox_uri.Items.Insert(0, "--Select--");
-            //combox_uri.SelectedIndex = 0;
-            foreach(var item in selections)
+            combox_uri.Items.Insert(0, "--Select--");
+            combox_uri.SelectedIndex = 0;
+            foreach (var item in selections)
             {
                 combox_uri.Items.Add(item.Name);
             }
@@ -61,7 +61,7 @@ namespace learningWindowsForms
             combox_uri.Visible = true;
         }
 
-        public string CreateRequestUrl(string requestName, UriOption uriOption, Panel parameterPanel)
+        public string CreateRequestUrl(string environment, string webService, UriOption uriOption, Panel parameterPanel)
         {
             //TODO add ability to take in different environments (create drop down list to the left of web service drop down list
 
@@ -83,9 +83,9 @@ namespace learningWindowsForms
 
             StringBuilder sb = new StringBuilder();
             //Environment
-            sb.Append("http://ws.xataxrs.com");
+            sb.Append(environment);
             //Web Service
-            sb.Append(requestName);
+            sb.Append(webService);
             //Uri
             sb.Append(uriOption.Name);
 
@@ -122,9 +122,9 @@ namespace learningWindowsForms
             return string.Empty;
         }
 
-        public void SendRequest(string requestName, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
+        public void SendRequest(string environment, string webService, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
         {
-            string url = CreateRequestUrl(requestName, uriOption, parameterPanel);
+            string url = CreateRequestUrl(environment, webService, uriOption, parameterPanel);
 
             //Create request with credentials, password, return type (JSON or XML)
 
