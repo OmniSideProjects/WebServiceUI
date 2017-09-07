@@ -59,6 +59,7 @@ namespace learningWindowsForms.DAL.Repositories
                             (
                                 UriOptionID     INTEGER PRIMARY KEY,
                                 Name            varchar(30) NOT NULL,
+                                IsThereQuery    boolean NOT NULL,
                                 RequestID       INTEGER NOT NULL,
                                 FOREIGN KEY     (RequestID) REFERENCES Request(RequestID)
                             );
@@ -66,8 +67,6 @@ namespace learningWindowsForms.DAL.Repositories
                             (
                                 ParameterID     INTEGER PRIMARY KEY,
                                 Name            varchar(30) NOT NULL,
-                                IsRequired      boolean NOT NULL,
-                                IsThereQuery    boolean NOT NULL,
                                 PreQuery        boolean NOT NULL,
                                 UriOptionID     INTEGER NOT NULL,
                                 FOREIGN KEY     (UriOptionID) REFERENCES UriOption(UriOptionID)
@@ -101,32 +100,32 @@ namespace learningWindowsForms.DAL.Repositories
                         new UriOption()
                         {
                             Name = "/driver/",
+                            IsThereQuery = false,
                             Parameters = new List<Parameter>
                             {
-                                new Parameter() { Name = "DriverID", IsRequired = true, IsThereQuery = false, PreQuery = false}
+                                new Parameter() { Name = "DriverID", PreQuery = false}
                             }
                         },
 
                         new UriOption()
                         {
                             Name = "/drivers/",
+                            IsThereQuery = true,
                             Parameters = new List<Parameter>()
                             {
-                                new Parameter() { Name = "ResourceGroupSID", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "OrganizationSID", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "IsActive", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "AsOfDateTime", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "Limit", IsRequired = false, IsThereQuery = false, PreQuery = false},
-                                new Parameter() { Name = "Offset", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "OrganizationID", IsRequired = true, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "ResourceGroupID", IsRequired = false, IsThereQuery = true, PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupSID", PreQuery = false},
+                                new Parameter() { Name = "OrganizationSID", PreQuery = false},
+                                new Parameter() { Name = "IsActive",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false},
 
 
                             }
                         }
                     }
-
-
                 },
                 new Request()
                 {
@@ -136,33 +135,34 @@ namespace learningWindowsForms.DAL.Repositories
                         new UriOption()
                         {
                             Name = "/driver/",
+                            IsThereQuery = false,
                             Parameters = new List<Parameter>
                             {
-                                new Parameter() { Name = "DriverID", IsRequired = true, IsThereQuery = false, PreQuery = false}
+                                new Parameter() { Name = "DriverID", PreQuery = false}
                             }
                         },
 
                         new UriOption()
                         {
                             Name = "/drivers/",
+                            IsThereQuery = true,
                             Parameters = new List<Parameter>()
                             {
-                                new Parameter() { Name = "ResourceGroupSID", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "OrganizationSID", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "IsActive", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "AsOfDateTime", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "Limit", IsRequired = false, IsThereQuery = false, PreQuery = false},
-                                new Parameter() { Name = "Offset", IsRequired = false, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "OrganizationID", IsRequired = true, IsThereQuery = true, PreQuery = false},
-                                new Parameter() { Name = "ResourceGroupID", IsRequired = false, IsThereQuery = true, PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupSID", PreQuery = false},
+                                new Parameter() { Name = "OrganizationSID", PreQuery = false},
+                                new Parameter() { Name = "IsActive",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false},
 
 
                             }
                         }
                     }
-
-
-                },            };
+                }
+            };
 
             foreach (var request in requests)
             {
@@ -174,7 +174,7 @@ namespace learningWindowsForms.DAL.Repositories
         #endregion
 
 
-        #region Create Record Methods
+        #region Add Record Methods
 
         private void AddCompleteRequest(Request newRequest)
         {
@@ -199,7 +199,7 @@ namespace learningWindowsForms.DAL.Repositories
         private void AddUriOption(long requestID, List<UriOption> uriOptions)
         {
             long uriOptionId;
-            const string insertSql = "INSERT INTO UriOption (UriOptionID, Name, RequestID) VALUES (NULL, @Name, @RequestID); SELECT last_insert_rowid();";
+            const string insertSql = "INSERT INTO UriOption (UriOptionID, Name, IsThereQuery, RequestID) VALUES (NULL, @Name, @IsThereQuery, @RequestID); SELECT last_insert_rowid();";
 
             foreach (var uri in uriOptions)
             {
@@ -208,6 +208,7 @@ namespace learningWindowsForms.DAL.Repositories
                     connection.Open();
                     var parameters = new DynamicParameters();
                     parameters.Add("@Name", uri.Name);
+                    parameters.Add("@IsThereQuery", uri.IsThereQuery);
                     parameters.Add("@RequestID", requestID);
                     connection.Execute(insertSql, parameters);
                     uriOptionId = connection.LastInsertRowId;
@@ -222,7 +223,7 @@ namespace learningWindowsForms.DAL.Repositories
 
         private void AddParameters(long uriOptionID, List<Parameter> newParameters)
         {
-            const string insertSQL = "INSERT INTO Parameter (Name, IsRequired, IsThereQuery, PreQuery, UriOptionID) VALUES (@Name, @IsRequired, @IsThereQuery, @PreQUery, @UriOption)";
+            const string insertSQL = "INSERT INTO Parameter (Name, PreQuery, UriOptionID) VALUES (@Name, @PreQUery, @UriOption)";
             using (var connection = SimpleDbConnection())
             {
                 connection.Open();
@@ -230,8 +231,6 @@ namespace learningWindowsForms.DAL.Repositories
                 {
                     var sqlParameter = new DynamicParameters();
                     sqlParameter.Add("@Name", param.Name);
-                    sqlParameter.Add("@IsRequired", param.IsRequired);
-                    sqlParameter.Add("@IsThereQuery", param.IsThereQuery);
                     sqlParameter.Add("@PreQuery", param.PreQuery);
                     sqlParameter.Add("@UriOption", uriOptionID);
 
