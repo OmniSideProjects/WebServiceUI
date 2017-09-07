@@ -39,7 +39,7 @@ namespace learningWindowsForms
             //_currentUri = new UriOption();
 
 
-            _fsh.SetComboBoxes(comboBox_webService, comboBox_uri, _allRequests);
+            _fsh.SetComboBoxes(comboBox_Environments, comboBox_webService, comboBox_uri, _allRequests);
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
             button_Send.Visible = false;
