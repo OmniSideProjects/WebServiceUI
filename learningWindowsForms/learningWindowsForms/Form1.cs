@@ -104,12 +104,22 @@ namespace learningWindowsForms
             // This should return a string which you can then display in the textBox_Url 
 
             //button_Send.Visible = true;
+            textBox_url.Clear();
+            string uri = _fsh.CreateRequestUrl(_environment, _currentWebService.Name, _currentUri, parameterPanel);
+            textBox_url.Text = uri;
+            textBox_url.Visible = true;
+            button_Send.Visible = true;
+
         }
 
 
         private void button_Send_Click(object sender, EventArgs e)
         {
-
+            textBox_url.Clear();
+            string url = _fsh.CreateRequestUrl(_environment, _currentWebService.Name, _currentUri, parameterPanel);
+            textBox_url.Text = url;
+            string displayString = _fsh.SendRequest(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text);
+            richTextBox_displayResponse.Text = displayString;
         }
 
 

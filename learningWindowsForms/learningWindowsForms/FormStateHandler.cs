@@ -9,6 +9,7 @@ using learningWindowsForms.Interfaces;
 using System.Drawing;
 using learningWindowsForms.Models;
 using System.Net;
+using System.Xml.Linq;
 
 namespace learningWindowsForms
 {
@@ -81,55 +82,88 @@ namespace learningWindowsForms
             //UriOption may need the IsQueryString property and not the Parameter
             //Be sure to persist any model changes to the BaseRepository Table creation and data load methods
 
-            StringBuilder sb = new StringBuilder();
-            //Environment
-            sb.Append(environment);
-            //Web Service
-            sb.Append(webService);
-            //Uri
-            sb.Append(uriOption.Name);
+            StringBuilder requestString = new StringBuilder();
 
-            StringBuilder queryStr = new StringBuilder();
-            foreach (Parameter param in uriOption.Parameters)
+            //Query string?
+            if (uriOption.IsThereQuery == true)
             {
-                //If there is no query, then there is only one parameter (PreQuery=true)
-                //if (param.IsThereQuery)
-                //{
-                //    queryStr.Append("?");
-                //}
+                requestString.Append("?");
 
-                //if (param.PreQuery)
-                //{
-                //    queryStr.Insert(0, param.Value);
-                //}
+                Parameter lastOne = uriOption.Parameters.Last();
+                foreach( var param in uriOption.Parameters)
+                {
+                    if (param.PreQuery)
+                    {
+                        requestString.Insert(0, param.Value);
+                    }
 
-                //queryStr.Append(param.Name);
-                //queryStr.Append()
-                //if (param.PreQuery)
-                //{
-                //    if (!param.IsThereQuery)
-                //    {
-                //        queryStr.Append(param.Value);
-                //        break;
-                //    }
-                //    queryStr.Append(param.Value);
-                //    queryStr.Append("?");
-                //}
-
+                    requestString.Append(param.Name);
+                    requestString.Append("=");
+                    if (param != lastOne)
+                    {
+                        requestString.Append("&");
+                    }
+                }
+            }
+            else
+            {
+                requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
             }
 
+            // prepend Uri
+            requestString.Insert(0, uriOption.Name);
+            // prepend Web Service
+            requestString.Insert(0, webService);
+            // prepend Environment
+            requestString.Insert(0, environment);
 
-            return string.Empty;
+            return requestString.ToString();
         }
 
-        public void SendRequest(string environment, string webService, UriOption uriOption, Panel parameterPanel, string companyLoginID, string username, string password)
+        public string SendRequest(string uri, string companyLoginID, string userName, string password)
         {
-            string url = CreateRequestUrl(environment, webService, uriOption, parameterPanel);
+            // Create HTTP GET request using driver web service
+            var request = WebRequest.Create(uri);
+            request.Method = "GET";
+            // Create authorization header (replace these values with actual credentials)
 
+            string auth = companyLoginID + "|" + userName + ":" + password;
+            string authHeader = Convert.ToBase64String(Encoding.UTF8.GetBytes(auth));
+            request.Headers["Authorization"] = authHeader;
+            // Request response from web service
+            string strResponse = null;
+
+            try
+            {
+                var httpWebResponse = (HttpWebResponse)request.GetResponse();
+                // Get response as string
+                var responseEncoding = System.Text.Encoding.GetEncoding(httpWebResponse.CharacterSet);
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(httpWebResponse.GetResponseStream(), responseEncoding))
+                {
+                    XDocument xmlDoc = new XDocument();
+                    try
+                    {
+                        xmlDoc = XDocument.Parse(reader.ReadToEnd());
+
+                    }
+                    catch( Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    strResponse = xmlDoc.ToString();
+                }
+                Console.WriteLine(strResponse);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return strResponse;
             //Create request with credentials, password, return type (JSON or XML)
 
             // Call method to display response data (needs to be made)
-            
+
         }
 
         public void CreateForm(List<Parameter> parameters, Panel panel)
