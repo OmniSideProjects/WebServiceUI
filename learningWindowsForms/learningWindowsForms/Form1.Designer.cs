@@ -33,7 +33,7 @@
             this.label_Username = new System.Windows.Forms.Label();
             this.textBox_username = new System.Windows.Forms.TextBox();
             this.label_Password = new System.Windows.Forms.Label();
-            this.texBox_password = new System.Windows.Forms.TextBox();
+            this.textBox_password = new System.Windows.Forms.TextBox();
             this.label_webService = new System.Windows.Forms.Label();
             this.comboBox_webService = new System.Windows.Forms.ComboBox();
             this.parameterPanel = new System.Windows.Forms.Panel();
@@ -44,6 +44,7 @@
             this.textBox_url = new System.Windows.Forms.TextBox();
             this.comboBox_Environments = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.richTextBox_displayResponse = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // label_CompanyID
@@ -87,12 +88,12 @@
             this.label_Password.TabIndex = 4;
             this.label_Password.Text = "Password";
             // 
-            // texBox_password
+            // textBox_password
             // 
-            this.texBox_password.Location = new System.Drawing.Point(503, 6);
-            this.texBox_password.Name = "texBox_password";
-            this.texBox_password.Size = new System.Drawing.Size(100, 20);
-            this.texBox_password.TabIndex = 5;
+            this.textBox_password.Location = new System.Drawing.Point(503, 6);
+            this.textBox_password.Name = "textBox_password";
+            this.textBox_password.Size = new System.Drawing.Size(100, 20);
+            this.textBox_password.TabIndex = 5;
             // 
             // label_webService
             // 
@@ -166,11 +167,12 @@
             // 
             // textBox_url
             // 
+            this.textBox_url.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_url.Location = new System.Drawing.Point(10, 59);
             this.textBox_url.Name = "textBox_url";
+            this.textBox_url.ReadOnly = true;
             this.textBox_url.Size = new System.Drawing.Size(953, 20);
             this.textBox_url.TabIndex = 13;
-            this.textBox_url.Visible = false;
             // 
             // comboBox_Environments
             // 
@@ -190,11 +192,23 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "Environment";
             // 
+            // richTextBox_displayResponse
+            // 
+            this.richTextBox_displayResponse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox_displayResponse.Cursor = System.Windows.Forms.Cursors.Default;
+            this.richTextBox_displayResponse.Location = new System.Drawing.Point(232, 85);
+            this.richTextBox_displayResponse.Name = "richTextBox_displayResponse";
+            this.richTextBox_displayResponse.ReadOnly = true;
+            this.richTextBox_displayResponse.Size = new System.Drawing.Size(731, 406);
+            this.richTextBox_displayResponse.TabIndex = 16;
+            this.richTextBox_displayResponse.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 503);
+            this.Controls.Add(this.richTextBox_displayResponse);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox_Environments);
             this.Controls.Add(this.textBox_url);
@@ -205,7 +219,7 @@
             this.Controls.Add(this.parameterPanel);
             this.Controls.Add(this.comboBox_webService);
             this.Controls.Add(this.label_webService);
-            this.Controls.Add(this.texBox_password);
+            this.Controls.Add(this.textBox_password);
             this.Controls.Add(this.label_Password);
             this.Controls.Add(this.textBox_username);
             this.Controls.Add(this.label_Username);
@@ -226,7 +240,7 @@
         private System.Windows.Forms.Label label_Username;
         private System.Windows.Forms.TextBox textBox_username;
         private System.Windows.Forms.Label label_Password;
-        private System.Windows.Forms.TextBox texBox_password;
+        private System.Windows.Forms.TextBox textBox_password;
         private System.Windows.Forms.Label label_webService;
         private System.Windows.Forms.ComboBox comboBox_webService;
         private System.Windows.Forms.Panel parameterPanel;
@@ -237,6 +251,7 @@
         private System.Windows.Forms.TextBox textBox_url;
         private System.Windows.Forms.ComboBox comboBox_Environments;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RichTextBox richTextBox_displayResponse;
     }
 }
 
