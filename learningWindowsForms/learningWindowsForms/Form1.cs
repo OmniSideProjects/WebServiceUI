@@ -18,6 +18,7 @@ namespace learningWindowsForms
         private UriOption _currentUri;
         private FormStateHandler _fsh;
         private string _environment;
+        private string _contentType;
 
         public Form1()
         {
@@ -27,6 +28,8 @@ namespace learningWindowsForms
             _currentWebService = new Request();
             _currentUri = new UriOption();
             _fsh = new FormStateHandler();
+            _contentType = "application/xml";
+            label_Status_Value.Visible = true;
 
         }
 
@@ -106,20 +109,59 @@ namespace learningWindowsForms
             //button_Send.Visible = true;
             textBox_url.Clear();
             string uri = _fsh.CreateRequestUrl(_environment, _currentWebService.Name, _currentUri, parameterPanel);
-            textBox_url.Text = uri;
+            textBox_url.Text = " " + uri;
             textBox_url.Visible = true;
             button_Send.Visible = true;
 
         }
 
 
-        private void button_Send_Click(object sender, EventArgs e)
+        private async void button_Send_Click(object sender, EventArgs e)
         {
             textBox_url.Clear();
+            richTextBox_displayResponse.Clear();
+
+            //start the waiting animation
+            progressBar1.Visible = true;
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            button_Send.Visible = false;
+
             string url = _fsh.CreateRequestUrl(_environment, _currentWebService.Name, _currentUri, parameterPanel);
-            textBox_url.Text = url;
-            string displayString = _fsh.SendRequest(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text);
+            textBox_url.Text = " " + url;
+
+            WSResponse result = await _fsh.SendRequestAsync(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text, _contentType);
+
+            progressBar1.Visible = false;
+
+
+            string displayString = result.Result; //_fsh.SendRequest(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text);
+            if (result.ErrorMessage != null)
+            {
+                displayString = result.ErrorMessage;
+            }
+            richTextBox_displayResponse.Clear();
             richTextBox_displayResponse.Text = displayString;
+            label_Status_Value.Text = $"{(int)result.StatusCode} " + result.StatusCode.ToString();
+            if(result.StatusCode == System.Net.HttpStatusCode.Accepted)
+            {
+                label_Status_Value.ForeColor = Color.Blue;
+            }
+            else
+            {
+                label_Status_Value.ForeColor = Color.Red;
+            }
+
+            button_Send.Visible = true;
+        }
+
+        private void radioButton_XML_CheckedChanged(object sender, EventArgs e)
+        {
+            _contentType = "application/xml";
+        }
+
+        private void radioButton_JSON_CheckedChanged(object sender, EventArgs e)
+        {
+            _contentType = "application/json";
         }
 
 

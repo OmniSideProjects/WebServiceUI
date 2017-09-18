@@ -45,6 +45,17 @@
             this.comboBox_Environments = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox_displayResponse = new System.Windows.Forms.RichTextBox();
+            this.label_url = new System.Windows.Forms.Label();
+            this.label_acceptType = new System.Windows.Forms.Label();
+            this.radioButton_XML = new System.Windows.Forms.RadioButton();
+            this.radioButton_JSON = new System.Windows.Forms.RadioButton();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label_Time_Value = new System.Windows.Forms.Label();
+            this.label_Time = new System.Windows.Forms.Label();
+            this.label_Status_Value = new System.Windows.Forms.Label();
+            this.label_Status = new System.Windows.Forms.Label();
+            this.label_Size = new System.Windows.Forms.Label();
+            this.label_Size_Value = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label_CompanyID
@@ -118,7 +129,7 @@
             this.parameterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.parameterPanel.Location = new System.Drawing.Point(10, 85);
             this.parameterPanel.Name = "parameterPanel";
-            this.parameterPanel.Size = new System.Drawing.Size(216, 406);
+            this.parameterPanel.Size = new System.Drawing.Size(216, 516);
             this.parameterPanel.TabIndex = 8;
             // 
             // label_uri
@@ -168,10 +179,10 @@
             // textBox_url
             // 
             this.textBox_url.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_url.Location = new System.Drawing.Point(10, 59);
+            this.textBox_url.Location = new System.Drawing.Point(43, 59);
             this.textBox_url.Name = "textBox_url";
             this.textBox_url.ReadOnly = true;
-            this.textBox_url.Size = new System.Drawing.Size(953, 20);
+            this.textBox_url.Size = new System.Drawing.Size(920, 20);
             this.textBox_url.TabIndex = 13;
             // 
             // comboBox_Environments
@@ -196,18 +207,135 @@
             // 
             this.richTextBox_displayResponse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox_displayResponse.Cursor = System.Windows.Forms.Cursors.Default;
-            this.richTextBox_displayResponse.Location = new System.Drawing.Point(232, 85);
+            this.richTextBox_displayResponse.Location = new System.Drawing.Point(235, 101);
             this.richTextBox_displayResponse.Name = "richTextBox_displayResponse";
             this.richTextBox_displayResponse.ReadOnly = true;
-            this.richTextBox_displayResponse.Size = new System.Drawing.Size(731, 406);
+            this.richTextBox_displayResponse.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.richTextBox_displayResponse.Size = new System.Drawing.Size(731, 501);
             this.richTextBox_displayResponse.TabIndex = 16;
             this.richTextBox_displayResponse.Text = "";
+            // 
+            // label_url
+            // 
+            this.label_url.AutoSize = true;
+            this.label_url.Location = new System.Drawing.Point(8, 65);
+            this.label_url.Name = "label_url";
+            this.label_url.Size = new System.Drawing.Size(29, 13);
+            this.label_url.TabIndex = 17;
+            this.label_url.Text = "URL";
+            // 
+            // label_acceptType
+            // 
+            this.label_acceptType.AutoSize = true;
+            this.label_acceptType.Location = new System.Drawing.Point(639, 8);
+            this.label_acceptType.Name = "label_acceptType";
+            this.label_acceptType.Size = new System.Drawing.Size(68, 13);
+            this.label_acceptType.TabIndex = 18;
+            this.label_acceptType.Text = "Accept Type";
+            // 
+            // radioButton_XML
+            // 
+            this.radioButton_XML.AutoSize = true;
+            this.radioButton_XML.Checked = true;
+            this.radioButton_XML.Location = new System.Drawing.Point(713, 7);
+            this.radioButton_XML.Name = "radioButton_XML";
+            this.radioButton_XML.Size = new System.Drawing.Size(47, 17);
+            this.radioButton_XML.TabIndex = 19;
+            this.radioButton_XML.TabStop = true;
+            this.radioButton_XML.Text = "XML";
+            this.radioButton_XML.UseVisualStyleBackColor = true;
+            this.radioButton_XML.CheckedChanged += new System.EventHandler(this.radioButton_XML_CheckedChanged);
+            // 
+            // radioButton_JSON
+            // 
+            this.radioButton_JSON.AutoSize = true;
+            this.radioButton_JSON.Location = new System.Drawing.Point(766, 7);
+            this.radioButton_JSON.Name = "radioButton_JSON";
+            this.radioButton_JSON.Size = new System.Drawing.Size(53, 17);
+            this.radioButton_JSON.TabIndex = 20;
+            this.radioButton_JSON.Text = "JSON";
+            this.radioButton_JSON.UseVisualStyleBackColor = true;
+            this.radioButton_JSON.CheckedChanged += new System.EventHandler(this.radioButton_JSON_CheckedChanged);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(533, 303);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.TabIndex = 21;
+            this.progressBar1.Visible = false;
+            // 
+            // label_Time_Value
+            // 
+            this.label_Time_Value.AutoSize = true;
+            this.label_Time_Value.Location = new System.Drawing.Point(813, 85);
+            this.label_Time_Value.Name = "label_Time_Value";
+            this.label_Time_Value.Size = new System.Drawing.Size(33, 13);
+            this.label_Time_Value.TabIndex = 22;
+            this.label_Time_Value.Text = "value";
+            // 
+            // label_Time
+            // 
+            this.label_Time.AutoSize = true;
+            this.label_Time.Location = new System.Drawing.Point(774, 85);
+            this.label_Time.Name = "label_Time";
+            this.label_Time.Size = new System.Drawing.Size(33, 13);
+            this.label_Time.TabIndex = 23;
+            this.label_Time.Text = "Time:";
+            // 
+            // label_Status_Value
+            // 
+            this.label_Status_Value.AutoSize = true;
+            this.label_Status_Value.Location = new System.Drawing.Point(676, 85);
+            this.label_Status_Value.Name = "label_Status_Value";
+            this.label_Status_Value.Size = new System.Drawing.Size(31, 17);
+            this.label_Status_Value.TabIndex = 24;
+            this.label_Status_Value.Text = "value";
+            this.label_Status_Value.UseCompatibleTextRendering = true;
+            // 
+            // label_Status
+            // 
+            this.label_Status.AutoSize = true;
+            this.label_Status.Location = new System.Drawing.Point(639, 85);
+            this.label_Status.Name = "label_Status";
+            this.label_Status.Size = new System.Drawing.Size(40, 13);
+            this.label_Status.TabIndex = 25;
+            this.label_Status.Text = "Status:";
+            // 
+            // label_Size
+            // 
+            this.label_Size.AutoSize = true;
+            this.label_Size.Location = new System.Drawing.Point(870, 85);
+            this.label_Size.Name = "label_Size";
+            this.label_Size.Size = new System.Drawing.Size(30, 13);
+            this.label_Size.TabIndex = 26;
+            this.label_Size.Text = "Size:";
+            // 
+            // label_Size_Value
+            // 
+            this.label_Size_Value.AutoSize = true;
+            this.label_Size_Value.Location = new System.Drawing.Point(906, 85);
+            this.label_Size_Value.Name = "label_Size_Value";
+            this.label_Size_Value.Size = new System.Drawing.Size(33, 13);
+            this.label_Size_Value.TabIndex = 27;
+            this.label_Size_Value.Text = "value";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 503);
+            this.ClientSize = new System.Drawing.Size(975, 609);
+            this.Controls.Add(this.label_Size_Value);
+            this.Controls.Add(this.label_Size);
+            this.Controls.Add(this.label_Status);
+            this.Controls.Add(this.label_Status_Value);
+            this.Controls.Add(this.label_Time);
+            this.Controls.Add(this.label_Time_Value);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.radioButton_JSON);
+            this.Controls.Add(this.radioButton_XML);
+            this.Controls.Add(this.label_acceptType);
+            this.Controls.Add(this.label_url);
             this.Controls.Add(this.richTextBox_displayResponse);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox_Environments);
@@ -252,6 +380,17 @@
         private System.Windows.Forms.ComboBox comboBox_Environments;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox_displayResponse;
+        private System.Windows.Forms.Label label_url;
+        private System.Windows.Forms.Label label_acceptType;
+        private System.Windows.Forms.RadioButton radioButton_XML;
+        private System.Windows.Forms.RadioButton radioButton_JSON;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label_Time_Value;
+        private System.Windows.Forms.Label label_Time;
+        private System.Windows.Forms.Label label_Status_Value;
+        private System.Windows.Forms.Label label_Status;
+        private System.Windows.Forms.Label label_Size;
+        private System.Windows.Forms.Label label_Size_Value;
     }
 }
 

@@ -10,6 +10,13 @@ using System.Drawing;
 using learningWindowsForms.Models;
 using System.Net;
 using System.Xml.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.IO;
+using System.Xml.Serialization;
+using System.Xml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace learningWindowsForms
 {
@@ -17,11 +24,14 @@ namespace learningWindowsForms
     {
         //private IRepo_WebServiceParameters _repo;
         //TODO: create interface for easy database swap out
+        //TODO: create process for updating database from
         private RequestRepository _repo;
+        private static HttpClient _client;
 
         public FormStateHandler()
         {
             _repo = new RequestRepository();
+            _client = new HttpClient();
         }
 
         public List<Request> GetAvailableRequests()
@@ -64,7 +74,6 @@ namespace learningWindowsForms
 
         public string CreateRequestUrl(string environment, string webService, UriOption uriOption, Panel parameterPanel)
         {
-            //TODO add ability to take in different environments (create drop down list to the left of web service drop down list
 
             //Create IEnumerable of TextBoxes
             IEnumerable<TextBox> textBoxes = parameterPanel.Controls.OfType<TextBox>();
@@ -78,9 +87,6 @@ namespace learningWindowsForms
             //    param.Value = textBoxes.Where(txtBx => txtBx.Name == param.Name).Select(x => x.Text).SingleOrDefault();
             //}
 
-
-            //UriOption may need the IsQueryString property and not the Parameter
-            //Be sure to persist any model changes to the BaseRepository Table creation and data load methods
 
             StringBuilder requestString = new StringBuilder();
 
@@ -96,12 +102,17 @@ namespace learningWindowsForms
                     {
                         requestString.Insert(0, param.Value);
                     }
-
-                    requestString.Append(param.Name);
-                    requestString.Append("=");
-                    if (param != lastOne)
+                    if (param.Value != "")
                     {
-                        requestString.Append("&");
+                        requestString.Append(param.Name);
+                        requestString.Append("=");
+                        if (param != lastOne)
+                        {
+                            requestString.Append("&");
+                        }
+
+                        requestString.Append(param.Value);
+
                     }
                 }
             }
@@ -120,8 +131,72 @@ namespace learningWindowsForms
             return requestString.ToString();
         }
 
+        public async Task<WSResponse> SendRequestAsync(string uri, string companyLoginID, string userName, string password, string contentType)
+        {
+            WSResponse result = new WSResponse();
+            //Set authorization for request
+            string auth = companyLoginID + "|" + userName + ":" + password;
+            var byteArray = Encoding.ASCII.GetBytes(auth);
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            //TODO: Make this to take in a parameter to set the return type
+            _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/xml"));
+
+
+            try
+            {
+                using (HttpResponseMessage response = await _client.GetAsync(new Uri(uri)))
+                {
+                    using (HttpContent content = response.Content)
+                    {
+                        string resultString = await content.ReadAsStringAsync();
+                        string reasonPhrase = response.ReasonPhrase;
+                        HttpResponseHeaders headers = response.Headers;
+                        HttpStatusCode code = response.StatusCode;
+
+                        StringBuilder sb = new StringBuilder();
+                        XmlWriterSettings settings = new XmlWriterSettings();
+                        settings.Indent = true;
+                        settings.IndentChars = "      ";
+                        settings.OmitXmlDeclaration = true;
+
+
+                        using(XmlWriter xw = XmlWriter.Create(sb, settings))
+                        {
+                            XDocument xmlDoc = XDocument.Parse(resultString);
+
+                            xmlDoc.WriteTo(xw);
+                        }
+
+                        if (contentType == "application/json")
+                        {
+                            XDocument jsonDoc = XDocument.Parse(sb.ToString());
+                            string json = JsonConvert.SerializeXNode(jsonDoc);
+                            var formatJSON = JValue.Parse(json).ToString(Newtonsoft.Json.Formatting.Indented);
+                            result.Result = formatJSON;
+                        }
+                        else
+                        {
+                            result.Result = sb.ToString();
+                        }
+
+                        result.ReasonPhase = reasonPhrase;
+                        result.Headers = headers;
+                        result.StatusCode = code;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
         public string SendRequest(string uri, string companyLoginID, string userName, string password)
         {
+
+
             // Create HTTP GET request using driver web service
             var request = WebRequest.Create(uri);
             request.Method = "GET";
@@ -157,6 +232,7 @@ namespace learningWindowsForms
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
+                strResponse = e.Message;
             }
 
             return strResponse;
@@ -212,6 +288,8 @@ namespace learningWindowsForms
 
             }
         }
+
+
 
         #region Old repo access (Repository_WebService)
         //public List<string> GetAvailableWebServices()
