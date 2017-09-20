@@ -667,6 +667,96 @@ namespace learningWindowsForms.DAL.Repositories
                         },
                     }
                 },
+                //MessageWebService.svc
+                new Request()
+                {
+                    Name = "/MessageWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/messages/",
+                            Value = "/messages/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageType", PreQuery = false},
+                                new Parameter() { Name = "FormNumber", PreQuery = false},
+                                new Parameter() { Name = "IncludeImageData", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "OrderDirection", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messages/{MessageSID}",
+                            Value = "/messages/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageSID", PreQuery = true},
+                                new Parameter() { Name = "IncludeImageData", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messages/read",
+                            Value = "/messages/read",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageType", PreQuery = false},
+                                new Parameter() { Name = "FormNumber", PreQuery = false},
+                                new Parameter() { Name = "IncludeImageData", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "OrderDirection", PreQuery = false},
+                                new Parameter() { Name = "MessageSID", PreQuery = false},
+                                new Parameter() { Name = "ImageSID", PreQuery = false},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false},
+                                new Parameter() { Name = "EndDateTime", PreQuery = false},
+
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messages/status/",
+                            Value = "/messages/status/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageType", PreQuery = false},
+                                new Parameter() { Name = "FormNumber", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messages/status/{MessageSID}",
+                            Value = "/messages/status/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageSID", PreQuery = true},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messages/update/{MessageSID}",
+                            Value = "/messages/update/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageSID", PreQuery = true},
+                            }
+                        },
+                    }
+                },
 
                 //DriverWebService.svc
                 new Request()
