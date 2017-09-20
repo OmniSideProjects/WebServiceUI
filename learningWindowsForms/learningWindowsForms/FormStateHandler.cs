@@ -95,34 +95,47 @@ namespace learningWindowsForms
             {
                 requestString.Append("?");
 
-                Parameter lastOne = uriOption.Parameters.Last();
-                foreach( var param in uriOption.Parameters)
+                var parametersWithInput = uriOption.Parameters.Where(x => x.Value != "").ToList();
+
+                if (parametersWithInput != null && parametersWithInput.Count > 0)
                 {
-                    if (param.PreQuery)
+                    Parameter lastOne = parametersWithInput.Last();        //uriOption.Parameters.Last();
+                    foreach (var param in parametersWithInput)
                     {
-                        requestString.Insert(0, param.Value);
-                    }
-                    if (param.Value != "")
-                    {
-                        requestString.Append(param.Name);
-                        requestString.Append("=");
-                        if (param != lastOne)
+                        if (param.PreQuery)
                         {
-                            requestString.Append("&");
+                            requestString.Insert(0, param.Value);
                         }
+                        else
+                        {
+                            if (param.Value != "")
+                            {
+                                requestString.Append(param.Name);
+                                requestString.Append("=");
 
-                        requestString.Append(param.Value);
+                                if (!string.IsNullOrWhiteSpace(param.Value))
+                                {
+                                    requestString.Append(param.Value.Trim());
+                                }
 
+                                if (param != lastOne)
+                                {
+                                    requestString.Append("&");
+                                }
+
+                            }
+                        }
                     }
                 }
-            }
-            else
-            {
-                requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
+                else
+                {
+                    requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
+                }
+
             }
 
             // prepend Uri
-            requestString.Insert(0, uriOption.Name);
+            requestString.Insert(0, uriOption.Value);
             // prepend Web Service
             requestString.Insert(0, webService);
             // prepend Environment
@@ -140,6 +153,7 @@ namespace learningWindowsForms
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
             //TODO: Make this to take in a parameter to set the return type
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/xml"));
+
 
 
             try
@@ -257,7 +271,7 @@ namespace learningWindowsForms
                     firstLabel.Location = new Point(3, 9);
                     firstLabel.Size = new Size(100, 20);
                     firstLabel.Name = item.Name;
-                    firstLabel.Text = item.Name;
+                    firstLabel.Text = item.PreQuery == true ? item.Name + " *" : item.Name;
                     panel.Controls.Add(firstLabel);
 
                     TextBox firstTextbox = new TextBox();
@@ -274,7 +288,7 @@ namespace learningWindowsForms
                 label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
                 label.Size = new Size(100, 13);
                 label.Name = item.Name;
-                label.Text = item.Name;
+                label.Text = item.PreQuery == true ? item.Name + " *" : item.Name;
                 panel.Controls.Add(label);
                 verticalSpaceLabel += 26;
 

@@ -10,6 +10,7 @@ namespace learningWindowsForms.Models
     {
         public int UriOptionID { get; set; }
         public string Name { get; set; }
+        public string Value { get; set; }
         public bool IsThereQuery { get; set; }
 
         public List<Parameter> Parameters { get; set; }

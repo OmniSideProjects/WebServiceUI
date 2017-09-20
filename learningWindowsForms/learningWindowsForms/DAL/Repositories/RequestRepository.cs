@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Windows.Forms;
+using learningWindowsForms.Interfaces;
 
 namespace learningWindowsForms.DAL.Repositories
 {
-    public class RequestRepository : BaseRepository
+    public class RequestRepository : BaseRepository, IRequestRepo
     {
         public RequestRepository()
         {
@@ -22,7 +23,13 @@ namespace learningWindowsForms.DAL.Repositories
 
         #region Initialize Database
 
-        private void RemoveOldFile()
+        public void InitializeDatabase()
+        {
+            RemoveOldFile();
+            CreateDatabaseTables();
+        }
+
+        public void RemoveOldFile()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WebServiceUI");
 
@@ -44,7 +51,7 @@ namespace learningWindowsForms.DAL.Repositories
 
         }
 
-        private void CreateDatabaseTables()
+        public void CreateDatabaseTables()
         {
             using (var connection = SimpleDbConnection())
             {
@@ -53,12 +60,13 @@ namespace learningWindowsForms.DAL.Repositories
                            @"CREATE TABLE Request
                             (
                                 RequestID       INTEGER PRIMARY KEY,
-                                Name            varchar(30) NOT NULL
+                                Name            varchar(50) NOT NULL
                             );
                             CREATE TABLE UriOption
                             (
                                 UriOptionID     INTEGER PRIMARY KEY,
-                                Name            varchar(30) NOT NULL,
+                                Name            varchar(50) NOT NULL,
+                                Value           varchar(50) NOT NULL,
                                 IsThereQuery    boolean NOT NULL,
                                 RequestID       INTEGER NOT NULL,
                                 FOREIGN KEY     (RequestID) REFERENCES Request(RequestID)
@@ -70,20 +78,7 @@ namespace learningWindowsForms.DAL.Repositories
                                 PreQuery        boolean NOT NULL,
                                 UriOptionID     INTEGER NOT NULL,
                                 FOREIGN KEY     (UriOptionID) REFERENCES UriOption(UriOptionID)
-                            );"
-                //INSERT INTO Request (RequestID, Name) 
-                //VALUES(1, '/DriverWebService.svc');
-
-                //INSERT INTO UriOption(UriOptionID, Name, RequestID)
-                //VALUES(1, '/driver/', 1),
-                //       (2, '/drivers/', 1);
-
-                //INSERT INTO Parameter(ParameterID, Name, UriOptionID, IsRequired, IsThereQuery, PreQuery)
-                //VALUES(1, 'DriverID', 1, 1, 0, 0),
-                //       (2, 'OrganizationID', 2, 1, 1, 0),
-                //       (3, 'ResourceGroupID', 2, 0, 1, 0); 
-                                    );
-
+                            );");
             }
         }
 
@@ -92,6 +87,588 @@ namespace learningWindowsForms.DAL.Repositories
 
             List<Request> requests = new List<Request>()
             {
+                //BlackBoxWebService.svc
+                new Request()
+                {
+                    Name = "/BlackBoxWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/blackboxsummary/",
+                            Value = "/blackboxsummary/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "OnlyShowEventsWithVideo", PreQuery = false },
+                                new Parameter() { Name = "OrderDirection", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/blackboxsummary/driver/{DriverID}",
+                            Value = "/blackboxsummary/driver/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>()
+                            {
+                                new Parameter() { Name = "DriverID", PreQuery = true},
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "OnlyShowEventsWithVideo", PreQuery = false },
+                                new Parameter() { Name = "OrderDirection", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/blackboxsummary/vehicle/{VehicleID}",
+                            Value = "/blackboxsummary/vehicle/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>()
+                            {
+                                new Parameter() { Name = "VehicleID", PreQuery = true},
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "OnlyShowEventsWithVideo", PreQuery = false },
+                                new Parameter() { Name = "OrderDirection", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        },
+
+                    }
+                },
+                //DelayDetailReportWebService.svc
+                new Request()
+                {
+                    Name = "/DelayDetailReportWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/DelayDetail/",
+                            Value = "/DelayDetail/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "DriverID", PreQuery = false },
+                                new Parameter() { Name = "RouteID", PreQuery = false },
+                                new Parameter() { Name = "DelayReason", PreQuery = false },
+                                new Parameter() { Name = "StartDateTime", PreQuery = false },
+                                new Parameter() { Name = "EndDateTime", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                                new Parameter() { Name = "Recurse", PreQuery = false },
+
+                            }
+                        }
+                    }
+                },
+                //DelaySummaryReportWebService.svc
+                new Request()
+                {
+                    Name = "/DelaySummaryReportWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/DelaySummary/",
+                            Value = "/DelaySummary/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "DriverID", PreQuery = false },
+                                new Parameter() { Name = "RouteID", PreQuery = false },
+                                new Parameter() { Name = "DelayReason", PreQuery = false },
+                                new Parameter() { Name = "StartDateTime", PreQuery = false },
+                                new Parameter() { Name = "EndDateTime", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                                new Parameter() { Name = "Recurse", PreQuery = false },
+
+                            }
+                        }
+                    }
+                },
+                //DeviceWebService.svc
+                new Request()
+                {
+                    Name = "/DeviceWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/device/{PhoneNumber}",
+                            Value = "/device/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "PHONENUMBER", PreQuery = true },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/devices/",
+                            Value = "/devices/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "IsActive", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        }
+
+                    }
+                },
+                //DriverLogWebService.svc
+                new Request()
+                {
+                    Name = "/DriverLogWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/driverlog/",
+                            Value = "/driverlog/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "Edits", PreQuery = false },
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/driverlog/{DriverID}",
+                            Value = "/driverlog/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "DriverID", PreQuery = true },
+                                new Parameter() { Name = "Edits", PreQuery = false },
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/driverlogdetails/",
+                            Value = "/driverlogdetails/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/driverlogdetails/{DriverID}",
+                            Value = "/driverlogdetails/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "DriverID", PreQuery = true },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                            }
+                        }
+
+
+                    }
+                },
+                //DriverStatusWebService.svc
+                new Request()
+                {
+                    Name = "/DriverStatusWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/driverstate/{DriverID}",
+                            Value = "/driverstate/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "DriverID", PreQuery = true },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/driverstatus/",
+                            Value = "/driverstatus/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationSID", PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupSID", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "IsActive",  PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false},
+                                new Parameter() { Name = "Options", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/driverstatus/{DriverSID}",
+                            Value = "/driverstatus/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "DriverSID", PreQuery = true },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                            }
+                        },
+                    }
+                },
+                //DVIRWebService.svc
+                new Request()
+                {
+                    Name = "/DVIRWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/DVIR/",
+                            Value = "/DVIR/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "DriverID", PreQuery = false},
+                                new Parameter() { Name = "AssetType", PreQuery = false},
+                                new Parameter() { Name = "InspectionsWithDefectsOnly", PreQuery = false},
+                                new Parameter() { Name = "IncludeNonDefects", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/DVIR/trailer/{TrailerID}",
+                            Value = "/DVIR/trailer/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "TrailerID", PreQuery = false},
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "DriverID", PreQuery = false},
+                                new Parameter() { Name = "InspectionsWithDefectsOnly", PreQuery = false},
+                                new Parameter() { Name = "IncludeNonDefects", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/DVIR/trailer/{VehicleID}",
+                            Value = "/DVIR/trailer/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "VehicleID", PreQuery = false},
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "DriverID", PreQuery = false},
+                                new Parameter() { Name = "InspectionsWithDefectsOnly", PreQuery = false},
+                                new Parameter() { Name = "IncludeNonDefects", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                    }
+                },
+                //FaultCodeWebService.svc
+                new Request()
+                {
+                    Name = "/FaultCodeWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/FaultCodes/",
+                            Value = "/FaultCodes/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/FaultCodes/vehicle/{VehicleID}",
+                            Value = "/FaultCodes/vehicle/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "VehicleID", PreQuery = true},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate",  PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                    }
+                },
+                //FormTemplateCategoryWebService.svc
+                new Request()
+                {
+                    Name = "/FormTemplateCategoryWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/formcategories/",
+                            Value = "/formcategories/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/formcategories/{FormTemplateCategorySID}",
+                            Value = "/formcategories/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormTemplateCategorySID", PreQuery = true},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/formcategory/{FormTemplateCategoryID}",
+                            Value = "/formcategory/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormTemplateCategoryID", PreQuery = true},
+                            }
+                        },
+                    }
+                },
+                //FormTemplateContentWebService.svc
+                new Request()
+                {
+                    Name = "/FormTemplateContentWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/formtemplatecontent/",
+                            Value = "/formtemplatecontent/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormCategorySID", PreQuery = false},
+                                new Parameter() { Name = "InProduction", PreQuery = false},
+                                new Parameter() { Name = "IsActive", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "FormCategoryID", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/formtemplatecontent/{FormNumber}",
+                            Value = "/formtemplatecontent/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormNumber", PreQuery = true},
+                            }
+                        },
+                    }
+                },
+                //FormTemplateHeaderWebService.svc
+                new Request()
+                {
+                    Name = "/FormTemplateHeaderWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/formtemplateheader/",
+                            Value = "/formtemplateheader/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormCategorySID", PreQuery = false},
+                                new Parameter() { Name = "InProduction", PreQuery = false},
+                                new Parameter() { Name = "IsActive", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "FormCategoryID", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/formtemplateheader/{FormNumber}",
+                            Value = "/formtemplateheader/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "FormNumber", PreQuery = true},
+                            }
+                        },
+                    }
+                },
+                //IFTAWebService.svc
+                new Request()
+                {
+                    Name = "/IFTAWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/Distances/",
+                            Value = "/Distances/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false},
+                                new Parameter() { Name = "EndDateTime", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "StateProvince", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                                new Parameter() { Name = "FormCategoryID", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/Distances/{vehicleId}",
+                            Value = "/Distances/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "VehicleID", PreQuery = true},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false},
+                                new Parameter() { Name = "EndDateTime", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/FuelReceipts/",
+                            Value = "/FuelReceipts/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationId", PreQuery = true},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "StateProvince", PreQuery = false},
+                                new Parameter() { Name = "Vendor", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/FuelReceipts/{vehicleId}",
+                            Value = "/FuelReceipts/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "VehicleId", PreQuery = true},
+                                new Parameter() { Name = "StartDate", PreQuery = false},
+                                new Parameter() { Name = "EndDate", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/JurisdictionCrossings/",
+                            Value = "/JurisdictionCrossings/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationId", PreQuery = true},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false},
+                                new Parameter() { Name = "EndDateTime", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/JurisdictionCrossings/{vehicleId}",
+                            Value = "/JurisdictionCrossings/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "VehicleId", PreQuery = true},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false},
+                                new Parameter() { Name = "EndDateTime", PreQuery = false},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+                            }
+                        },
+                    }
+                },
+
+                //DriverWebService.svc
                 new Request()
                 {
                     Name = "/DriverWebService.svc",
@@ -99,17 +676,18 @@ namespace learningWindowsForms.DAL.Repositories
                     {
                         new UriOption()
                         {
-                            Name = "/driver/",
+                            Name = "/driver/{DriverID}",
+                            Value = "/driver/",
                             IsThereQuery = false,
                             Parameters = new List<Parameter>
                             {
                                 new Parameter() { Name = "DriverID", PreQuery = false}
                             }
                         },
-
                         new UriOption()
                         {
                             Name = "/drivers/",
+                            Value = "/drivers/",
                             IsThereQuery = true,
                             Parameters = new List<Parameter>()
                             {
@@ -121,47 +699,85 @@ namespace learningWindowsForms.DAL.Repositories
                                 new Parameter() { Name = "Offset", PreQuery = false},
                                 new Parameter() { Name = "OrganizationID", PreQuery = false},
                                 new Parameter() { Name = "ResourceGroupID", PreQuery = false},
-
-
                             }
-                        }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/drivers/{DriverSID}",
+                            Value = "/drivers/",
+                            IsThereQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "DriverSID", PreQuery = true}
+                            }
+                        },
+
+
                     }
                 },
+                //VehicleBreadcrumbWebService.svc
                 new Request()
                 {
-                    Name = "/TestInsert",
+                    Name = "/VehicleBreadcrumbWebService.svc",
                     UriOptions = new List<UriOption>()
                     {
                         new UriOption()
                         {
-                            Name = "/driver/",
-                            IsThereQuery = false,
+                            Name = "/vehiclebreadcrumb/",
+                            Value = "/vehiclebreadcrumb/",
+                            IsThereQuery = true,
                             Parameters = new List<Parameter>
                             {
-                                new Parameter() { Name = "DriverID", PreQuery = false}
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "IsActive", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "StartDateTime", PreQuery = false },
+                                new Parameter() { Name = "EndDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                                new Parameter() { Name = "OrganizationSID", PreQuery = false},
+                                new Parameter() { Name = "ResourceGroupSID", PreQuery = false},
+
                             }
                         },
-
                         new UriOption()
                         {
-                            Name = "/drivers/",
+                            Name = "/vehiclebreadcrumbs/{VehicleID}",
+                            Value = "/vehiclebreadcrumbs/",
                             IsThereQuery = true,
                             Parameters = new List<Parameter>()
                             {
-                                new Parameter() { Name = "ResourceGroupSID", PreQuery = false},
-                                new Parameter() { Name = "OrganizationSID", PreQuery = false},
-                                new Parameter() { Name = "IsActive",  PreQuery = false},
+                                new Parameter() { Name = "VehicleID", PreQuery = true},
                                 new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false },
+                                new Parameter() { Name = "EndDateTime", PreQuery = false },
                                 new Parameter() { Name = "Limit", PreQuery = false},
                                 new Parameter() { Name = "Offset", PreQuery = false},
-                                new Parameter() { Name = "OrganizationID", PreQuery = false},
-                                new Parameter() { Name = "ResourceGroupID", PreQuery = false},
 
 
                             }
-                        }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/vehiclebreadcrumb/{VehicleSID}",
+                            Value = "/vehiclebreadcrumb/",
+                            IsThereQuery = true,
+                            Parameters = new List<Parameter>()
+                            {
+                                new Parameter() { Name = "VehicleSID", PreQuery = true},
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false},
+                                new Parameter() { Name = "StartDateTime", PreQuery = false },
+                                new Parameter() { Name = "EndDateTime", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false},
+                                new Parameter() { Name = "Offset", PreQuery = false},
+
+
+                            }
+                        },
+
                     }
-                }
+                },
             };
 
             foreach (var request in requests)
@@ -176,7 +792,7 @@ namespace learningWindowsForms.DAL.Repositories
 
         #region Add Record Methods
 
-        private void AddCompleteRequest(Request newRequest)
+        public void AddCompleteRequest(Request newRequest)
         {
             long requestID;
             const string insertSql = "INSERT INTO Request (RequestID, Name) VALUES (NULL, @RequestName);";
@@ -199,7 +815,7 @@ namespace learningWindowsForms.DAL.Repositories
         private void AddUriOption(long requestID, List<UriOption> uriOptions)
         {
             long uriOptionId;
-            const string insertSql = "INSERT INTO UriOption (UriOptionID, Name, IsThereQuery, RequestID) VALUES (NULL, @Name, @IsThereQuery, @RequestID); SELECT last_insert_rowid();";
+            const string insertSql = "INSERT INTO UriOption (UriOptionID, Name, Value, IsThereQuery, RequestID) VALUES (NULL, @Name, @Value, @IsThereQuery, @RequestID); SELECT last_insert_rowid();";
 
             foreach (var uri in uriOptions)
             {
@@ -208,6 +824,7 @@ namespace learningWindowsForms.DAL.Repositories
                     connection.Open();
                     var parameters = new DynamicParameters();
                     parameters.Add("@Name", uri.Name);
+                    parameters.Add("@Value", uri.Value);
                     parameters.Add("@IsThereQuery", uri.IsThereQuery);
                     parameters.Add("@RequestID", requestID);
                     connection.Execute(insertSql, parameters);
