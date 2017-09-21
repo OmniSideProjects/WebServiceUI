@@ -91,7 +91,7 @@ namespace learningWindowsForms
             StringBuilder requestString = new StringBuilder();
 
             //Query string?
-            if (uriOption.IsThereQuery == true)
+            if (uriOption.ThereIsQuery == true)
             {
                 requestString.Append("?");
 
@@ -271,7 +271,7 @@ namespace learningWindowsForms
                     firstLabel.Location = new Point(3, 9);
                     firstLabel.Size = new Size(100, 20);
                     firstLabel.Name = item.Name;
-                    firstLabel.Text = item.PreQuery == true ? item.Name + " *" : item.Name;
+                    firstLabel.Text = item.Required == true ? item.Name + " *" : item.Name;
                     panel.Controls.Add(firstLabel);
 
                     TextBox firstTextbox = new TextBox();
@@ -288,7 +288,7 @@ namespace learningWindowsForms
                 label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
                 label.Size = new Size(100, 13);
                 label.Name = item.Name;
-                label.Text = item.PreQuery == true ? item.Name + " *" : item.Name;
+                label.Text = item.Required == true ? item.Name + " *" : item.Name;
                 panel.Controls.Add(label);
                 verticalSpaceLabel += 26;
 

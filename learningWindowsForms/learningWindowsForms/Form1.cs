@@ -132,10 +132,16 @@ namespace learningWindowsForms
             else
             {
                 label_Status_Value.ForeColor = Color.Red;
+                label_Status_Value.Visible = true;
+
+                if (result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                {
+                    MessageBox.Show("Please isolate root cause of '500 Internal Server Error', document URL/parameters used and escalate.");
+
+                }
             }
 
-            label_Status_Value.Visible = true;
-            
+
             //TODO: show size of response
             // This is not working
             //var contentLengthHeader = result.Headers.Single(x => x.Key == "Content-Length"); 
