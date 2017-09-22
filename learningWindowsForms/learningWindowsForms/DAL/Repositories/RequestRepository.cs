@@ -225,7 +225,7 @@ namespace learningWindowsForms.DAL.Repositories
                             ThereIsQuery = false,
                             Parameters = new List<Parameter>
                             {
-                                new Parameter() { Name = "PHONENUMBER", PreQuery = true, Required = true },
+                                new Parameter() { Name = "PhoneNumber", PreQuery = true, Required = true },
                             }
                         },
                         new UriOption()
@@ -1300,7 +1300,7 @@ namespace learningWindowsForms.DAL.Repositories
                             ThereIsQuery = false,
                             Parameters = new List<Parameter>
                             {
-                                new Parameter() { Name = "UserID", PreQuery = true, Required = true},
+                                new Parameter() { Name = "UserID", PreQuery = true, Required = false},
                             }
                         }
                     }
