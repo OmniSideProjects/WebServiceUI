@@ -10,6 +10,13 @@ using System.Drawing;
 using learningWindowsForms.Models;
 using System.Net;
 using System.Xml.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.IO;
+using System.Xml.Serialization;
+using System.Xml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace learningWindowsForms
 {
@@ -17,11 +24,14 @@ namespace learningWindowsForms
     {
         //private IRepo_WebServiceParameters _repo;
         //TODO: create interface for easy database swap out
+        //TODO: create process for updating database from
         private RequestRepository _repo;
+        private static HttpClient _client;
 
         public FormStateHandler()
         {
             _repo = new RequestRepository();
+            _client = new HttpClient();
         }
 
         public List<Request> GetAvailableRequests()
@@ -64,7 +74,6 @@ namespace learningWindowsForms
 
         public string CreateRequestUrl(string environment, string webService, UriOption uriOption, Panel parameterPanel)
         {
-            //TODO add ability to take in different environments (create drop down list to the left of web service drop down list
 
             //Create IEnumerable of TextBoxes
             IEnumerable<TextBox> textBoxes = parameterPanel.Controls.OfType<TextBox>();
@@ -79,39 +88,54 @@ namespace learningWindowsForms
             //}
 
 
-            //UriOption may need the IsQueryString property and not the Parameter
-            //Be sure to persist any model changes to the BaseRepository Table creation and data load methods
-
             StringBuilder requestString = new StringBuilder();
 
             //Query string?
-            if (uriOption.IsThereQuery == true)
+            if (uriOption.ThereIsQuery == true)
             {
                 requestString.Append("?");
 
-                Parameter lastOne = uriOption.Parameters.Last();
-                foreach( var param in uriOption.Parameters)
-                {
-                    if (param.PreQuery)
-                    {
-                        requestString.Insert(0, param.Value);
-                    }
+                var parametersWithInput = uriOption.Parameters.Where(x => x.Value != "").ToList();
 
-                    requestString.Append(param.Name);
-                    requestString.Append("=");
-                    if (param != lastOne)
+                if (parametersWithInput != null && parametersWithInput.Count > 0)
+                {
+                    Parameter lastOne = parametersWithInput.Last();        //uriOption.Parameters.Last();
+                    foreach (var param in parametersWithInput)
                     {
-                        requestString.Append("&");
+                        if (param.PreQuery)
+                        {
+                            requestString.Insert(0, param.Value);
+                        }
+                        else
+                        {
+                            if (param.Value != "")
+                            {
+                                requestString.Append(param.Name);
+                                requestString.Append("=");
+
+                                if (!string.IsNullOrWhiteSpace(param.Value))
+                                {
+                                    requestString.Append(param.Value.Trim());
+                                }
+
+                                if (param != lastOne)
+                                {
+                                    requestString.Append("&");
+                                }
+
+                            }
+                        }
                     }
                 }
-            }
-            else
-            {
-                requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
+                else
+                {
+                    requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
+                }
+
             }
 
             // prepend Uri
-            requestString.Insert(0, uriOption.Name);
+            requestString.Insert(0, uriOption.Value);
             // prepend Web Service
             requestString.Insert(0, webService);
             // prepend Environment
@@ -120,8 +144,73 @@ namespace learningWindowsForms
             return requestString.ToString();
         }
 
+        public async Task<WSResponse> SendRequestAsync(string uri, string companyLoginID, string userName, string password, string contentType)
+        {
+            WSResponse result = new WSResponse();
+            //Set authorization for request
+            string auth = companyLoginID + "|" + userName + ":" + password;
+            var byteArray = Encoding.ASCII.GetBytes(auth);
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            //TODO: Make this to take in a parameter to set the return type
+            _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/xml"));
+
+
+
+            try
+            {
+                using (HttpResponseMessage response = await _client.GetAsync(new Uri(uri)))
+                {
+                    using (HttpContent content = response.Content)
+                    {
+                        string resultString = await content.ReadAsStringAsync();
+                        string reasonPhrase = response.ReasonPhrase;
+                        HttpResponseHeaders headers = response.Headers;
+                        HttpStatusCode code = response.StatusCode;
+
+                        StringBuilder sb = new StringBuilder();
+                        XmlWriterSettings settings = new XmlWriterSettings();
+                        settings.Indent = true;
+                        settings.IndentChars = "      ";
+                        settings.OmitXmlDeclaration = true;
+
+
+                        using(XmlWriter xw = XmlWriter.Create(sb, settings))
+                        {
+                            XDocument xmlDoc = XDocument.Parse(resultString);
+
+                            xmlDoc.WriteTo(xw);
+                        }
+
+                        if (contentType == "application/json")
+                        {
+                            XDocument jsonDoc = XDocument.Parse(sb.ToString());
+                            string json = JsonConvert.SerializeXNode(jsonDoc);
+                            var formatJSON = JValue.Parse(json).ToString(Newtonsoft.Json.Formatting.Indented);
+                            result.Result = formatJSON;
+                        }
+                        else
+                        {
+                            result.Result = sb.ToString();
+                        }
+
+                        result.ReasonPhase = reasonPhrase;
+                        result.Headers = headers;
+                        result.StatusCode = code;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
         public string SendRequest(string uri, string companyLoginID, string userName, string password)
         {
+
+
             // Create HTTP GET request using driver web service
             var request = WebRequest.Create(uri);
             request.Method = "GET";
@@ -157,6 +246,7 @@ namespace learningWindowsForms
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
+                strResponse = e.Message;
             }
 
             return strResponse;
@@ -181,7 +271,7 @@ namespace learningWindowsForms
                     firstLabel.Location = new Point(3, 9);
                     firstLabel.Size = new Size(100, 20);
                     firstLabel.Name = item.Name;
-                    firstLabel.Text = item.Name;
+                    firstLabel.Text = item.Required == true ? item.Name + " *" : item.Name;
                     panel.Controls.Add(firstLabel);
 
                     TextBox firstTextbox = new TextBox();
@@ -198,7 +288,7 @@ namespace learningWindowsForms
                 label.Location = new Point(3, verticalSpaceLabel);       //(25 * labelCount) + 5);
                 label.Size = new Size(100, 13);
                 label.Name = item.Name;
-                label.Text = item.Name;
+                label.Text = item.Required == true ? item.Name + " *" : item.Name;
                 panel.Controls.Add(label);
                 verticalSpaceLabel += 26;
 
@@ -212,6 +302,8 @@ namespace learningWindowsForms
 
             }
         }
+
+
 
         #region Old repo access (Repository_WebService)
         //public List<string> GetAvailableWebServices()
