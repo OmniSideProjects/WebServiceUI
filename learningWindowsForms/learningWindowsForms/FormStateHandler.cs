@@ -127,11 +127,10 @@ namespace learningWindowsForms
                         }
                     }
                 }
-                else
-                {
-                    requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
-                }
-
+            }
+            else
+            {
+                requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
             }
 
             // prepend Uri
