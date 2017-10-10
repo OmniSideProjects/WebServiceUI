@@ -20,6 +20,10 @@ namespace learningWindowsForms
         private string _environment;
         private string _contentType;
 
+        //For search functionality
+        private int start = 0;
+        private int indexOfSearchText = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -28,8 +32,6 @@ namespace learningWindowsForms
             _currentWebService = new Request();
             _currentUri = new UriOption();
             _fsh = new FormStateHandler();
-            
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,11 +43,11 @@ namespace learningWindowsForms
             _environment = "https://ws.xataxrs.com"; //default value: production
             label_uri.Visible = false;
             comboBox_uri.Visible = false;
-            button_Send.Visible = false;
+            label_Count_Value.Visible = false;
+            label_Count_Description.Visible = false;
             _contentType = "application/xml";
             label_Status_Value.Visible = false;
-
-
+            button_Send.BackColor = Color.LightGray;
         }
 
         private void comboBox_Environments_SelectedIndexChanged(object sender, EventArgs e)
@@ -65,6 +67,8 @@ namespace learningWindowsForms
                 comboBox_uri.Visible = false;
                 comboBox_uri.Items.Clear();
                 parameterPanel.Controls.Clear();
+                button_Send.Enabled = false;
+                button_Send.BackColor = Color.LightGray;
 
             }
             else
@@ -87,18 +91,27 @@ namespace learningWindowsForms
 
             if(selection == "--Select--")
             {
+                _currentUri = null;
                 parameterPanel.Controls.Clear();
+                button_Send.Enabled = false;
+                button_Send.BackColor = Color.LightGray;
             }
             else
             {
                 _currentUri = _currentWebService.UriOptions.Where(x => x.Name == selection).SingleOrDefault();
                 _fsh.CreateForm(_currentUri.Parameters, parameterPanel);
-                button_Send.Visible = true;
+                button_Send.Enabled = true;
+                button_Send.BackColor = Color.DodgerBlue;
             }
         }
 
         private async void button_Send_Click(object sender, EventArgs e)
         {
+            //reset and enable search function
+            start = 0;
+            indexOfSearchText = 0;
+            label_Count_Description.Visible = false;
+            label_Count_Value.Visible = false;
             textBox_url.Clear();
             richTextBox_displayResponse.Clear();
             label_Status_Value.Visible = false;
@@ -132,7 +145,6 @@ namespace learningWindowsForms
             else
             {
                 label_Status_Value.ForeColor = Color.Red;
-                label_Status_Value.Visible = true;
 
                 if (result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
@@ -141,6 +153,7 @@ namespace learningWindowsForms
                 }
             }
 
+            label_Status_Value.Visible = true;
 
             //TODO: show size of response
             // This is not working
@@ -160,6 +173,47 @@ namespace learningWindowsForms
             _contentType = "application/json";
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int startIndex = 0;
 
+
+            if (textSearch.Text.Length > 0 && textSearch.Text != "")
+            {
+                startIndex = _fsh.FindMyText(textSearch.Text.Trim(), start, richTextBox_displayResponse.Text.Length, indexOfSearchText, richTextBox_displayResponse);
+                if (start == 0)
+                {
+                    label_Count_Value.Text = _fsh.CountStringOccurence(richTextBox_displayResponse.Text, textSearch.Text);
+                    label_Count_Value.Visible = true;
+                    label_Count_Description.Visible = true;
+                    if (label_Count_Value.Text == "0")
+                    {
+                        label_Count_Description.Text = "Occurence";
+                    }
+                }
+
+                if (startIndex >= 0)
+                {
+                    richTextBox_displayResponse.SelectionBackColor = Color.Yellow;
+                    richTextBox_displayResponse.ScrollToCaret();
+                    int endIndex = textSearch.Text.Length;
+                    richTextBox_displayResponse.Select(startIndex, endIndex);
+                    start = startIndex + endIndex;
+                }
+
+            }
+
+
+        }
+
+        private void textSearch_TextChanged(object sender, EventArgs e)
+        {
+            start = 0;
+            indexOfSearchText = 0;
+            label_Count_Value.Visible = false;
+            label_Count_Description.Visible =false;
+            richTextBox_displayResponse.SelectAll();
+            richTextBox_displayResponse.SelectionBackColor = Color.White;
+        }
     }
 }
