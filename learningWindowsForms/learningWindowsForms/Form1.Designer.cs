@@ -55,6 +55,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textSearch = new System.Windows.Forms.TextBox();
+            this.button_Search = new System.Windows.Forms.Button();
+            this.label_Count_Value = new System.Windows.Forms.Label();
+            this.label_Count_Description = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label_CompanyID
@@ -126,7 +131,7 @@
             // parameterPanel
             // 
             this.parameterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.parameterPanel.Location = new System.Drawing.Point(10, 101);
+            this.parameterPanel.Location = new System.Drawing.Point(10, 111);
             this.parameterPanel.Name = "parameterPanel";
             this.parameterPanel.Size = new System.Drawing.Size(216, 501);
             this.parameterPanel.TabIndex = 8;
@@ -152,6 +157,7 @@
             // button_Send
             // 
             this.button_Send.BackColor = System.Drawing.SystemColors.Highlight;
+            this.button_Send.Enabled = false;
             this.button_Send.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_Send.Location = new System.Drawing.Point(766, 31);
             this.button_Send.Name = "button_Send";
@@ -192,7 +198,7 @@
             // 
             this.richTextBox_displayResponse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox_displayResponse.Cursor = System.Windows.Forms.Cursors.Default;
-            this.richTextBox_displayResponse.Location = new System.Drawing.Point(235, 101);
+            this.richTextBox_displayResponse.Location = new System.Drawing.Point(232, 111);
             this.richTextBox_displayResponse.Name = "richTextBox_displayResponse";
             this.richTextBox_displayResponse.ReadOnly = true;
             this.richTextBox_displayResponse.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
@@ -252,9 +258,9 @@
             // 
             // label_Status_Value
             // 
-            this.label_Status_Value.Location = new System.Drawing.Point(848, 85);
+            this.label_Status_Value.Location = new System.Drawing.Point(809, 88);
             this.label_Status_Value.Name = "label_Status_Value";
-            this.label_Status_Value.Size = new System.Drawing.Size(112, 13);
+            this.label_Status_Value.Size = new System.Drawing.Size(150, 13);
             this.label_Status_Value.TabIndex = 24;
             this.label_Status_Value.Text = "value";
             this.label_Status_Value.UseCompatibleTextRendering = true;
@@ -262,7 +268,7 @@
             // label_Status
             // 
             this.label_Status.AutoSize = true;
-            this.label_Status.Location = new System.Drawing.Point(802, 85);
+            this.label_Status.Location = new System.Drawing.Point(763, 88);
             this.label_Status.Name = "label_Status";
             this.label_Status.Size = new System.Drawing.Size(40, 13);
             this.label_Status.TabIndex = 25;
@@ -271,7 +277,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 85);
+            this.label2.Location = new System.Drawing.Point(7, 88);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 28;
@@ -295,11 +301,62 @@
             this.label4.TabIndex = 30;
             this.label4.Text = "GET";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(232, 88);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(67, 13);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "Search Data";
+            // 
+            // textSearch
+            // 
+            this.textSearch.Location = new System.Drawing.Point(307, 85);
+            this.textSearch.Name = "textSearch";
+            this.textSearch.Size = new System.Drawing.Size(131, 20);
+            this.textSearch.TabIndex = 32;
+            this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
+            // 
+            // button_Search
+            // 
+            this.button_Search.Location = new System.Drawing.Point(444, 84);
+            this.button_Search.Name = "button_Search";
+            this.button_Search.Size = new System.Drawing.Size(75, 21);
+            this.button_Search.TabIndex = 33;
+            this.button_Search.Text = "Search";
+            this.button_Search.UseVisualStyleBackColor = true;
+            this.button_Search.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label_Count_Value
+            // 
+            this.label_Count_Value.AutoSize = true;
+            this.label_Count_Value.Location = new System.Drawing.Point(537, 88);
+            this.label_Count_Value.Name = "label_Count_Value";
+            this.label_Count_Value.Size = new System.Drawing.Size(33, 13);
+            this.label_Count_Value.TabIndex = 34;
+            this.label_Count_Value.Text = "value";
+            // 
+            // label_Count_Description
+            // 
+            this.label_Count_Description.AutoSize = true;
+            this.label_Count_Description.Location = new System.Drawing.Point(576, 88);
+            this.label_Count_Description.Name = "label_Count_Description";
+            this.label_Count_Description.Size = new System.Drawing.Size(65, 13);
+            this.label_Count_Description.TabIndex = 35;
+            this.label_Count_Description.Text = "Occurences";
+            this.label_Count_Description.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 609);
+            this.ClientSize = new System.Drawing.Size(971, 621);
+            this.Controls.Add(this.label_Count_Description);
+            this.Controls.Add(this.label_Count_Value);
+            this.Controls.Add(this.button_Search);
+            this.Controls.Add(this.textSearch);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -363,6 +420,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textSearch;
+        private System.Windows.Forms.Button button_Search;
+        private System.Windows.Forms.Label label_Count_Value;
+        private System.Windows.Forms.Label label_Count_Description;
     }
 }
 

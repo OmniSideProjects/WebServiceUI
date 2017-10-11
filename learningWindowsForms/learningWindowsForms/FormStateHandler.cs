@@ -302,6 +302,42 @@ namespace learningWindowsForms
             }
         }
 
+        public int FindMyText(string txtToSearch, int searchStart, int rtbTextLength, int indexOfSearchText, RichTextBox dataTxtBx)
+        {
+            if (searchStart > 0 && rtbTextLength > 0 && indexOfSearchText >= 0)
+            {
+                dataTxtBx.Undo();
+            }
+
+            int iReturn = -1;
+
+            if (searchStart >= 0 && indexOfSearchText >= 0)
+            {
+                if (rtbTextLength > searchStart || rtbTextLength == -1)
+                {
+                    indexOfSearchText = dataTxtBx.Find(txtToSearch, searchStart, rtbTextLength, RichTextBoxFinds.None);
+
+                    if (indexOfSearchText != -1)
+                    {
+                        iReturn = indexOfSearchText;
+                    }
+                }
+            }
+            return iReturn;
+        }
+
+        public string CountStringOccurence(string text, string pattern)
+        {
+            int count = 0;
+            int i = 0;
+            while((i = text.IndexOf(pattern, i)) != -1)
+            {
+                i += pattern.Length;
+                count++;
+            }
+            return count.ToString();
+        }
+
 
 
         #region Old repo access (Repository_WebService)
