@@ -14,11 +14,14 @@ namespace learningWindowsForms.DAL.Repositories
 {
     public class RequestRepository : BaseRepository, IRequestRepo
     {
+        private List<Request> _allRequests;
+
         public RequestRepository()
         {
-                RemoveOldFile();
-                CreateDatabaseTables();
-                LoadData();
+            _allRequests = new List<Request>();
+            //RemoveOldFile();
+            //CreateDatabaseTables();
+            LoadData();
         }
 
         #region Initialize Database
@@ -1462,11 +1465,11 @@ namespace learningWindowsForms.DAL.Repositories
                     }
                 }
             };
-
-            foreach (var request in requests)
-            {
-                AddCompleteRequest(request);
-            }
+            _allRequests = requests;
+            //foreach (var request in requests)
+            //{
+            //    AddCompleteRequest(request);
+            //}
 
         }
 
@@ -1549,23 +1552,23 @@ namespace learningWindowsForms.DAL.Repositories
 
         public List<Request> GetAllRequestsWithUriOptionsAndParameters()
         {
-            if (!File.Exists(DbFile))
-            {
-                CreateDatabaseTables();
-                LoadData();
-            }
+            //if (!File.Exists(DbFile))
+            //{
+            //    CreateDatabaseTables();
+            //    LoadData();
+            //}
 
-            var allRequests = GetAllRequests();
-            foreach (var request in allRequests)
-            {
-                request.UriOptions = GetUriOptions(request.RequestID);
-                foreach (var uriOption in request.UriOptions)
-                {
-                    uriOption.Parameters = GetParameters(uriOption.UriOptionID);
-                }
-            }
+            //var allRequests = GetAllRequests();
+            //foreach (var request in allRequests)
+            //{
+            //    request.UriOptions = GetUriOptions(request.RequestID);
+            //    foreach (var uriOption in request.UriOptions)
+            //    {
+            //        uriOption.Parameters = GetParameters(uriOption.UriOptionID);
+            //    }
+            //}
 
-            return allRequests;
+            return _allRequests;
 
         }
 

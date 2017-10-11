@@ -330,7 +330,9 @@ namespace learningWindowsForms
         {
             int count = 0;
             int i = 0;
-            while((i = text.IndexOf(pattern, i)) != -1)
+            string textToSearch = text.ToUpper();
+            string searchText = pattern.ToUpper();
+            while((i = textToSearch.IndexOf(searchText, i)) != -1)
             {
                 i += pattern.Length;
                 count++;
