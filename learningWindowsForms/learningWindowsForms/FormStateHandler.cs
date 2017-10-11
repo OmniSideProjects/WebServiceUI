@@ -43,7 +43,14 @@ namespace learningWindowsForms
         {
             //Environments
             comboBoxEnvironments.Items.Insert(0, "https://ws.xataxrs.com"); //production
-            comboBoxEnvironments.Items.Insert(1, "https://a1ws.xataxrs.com"); // alpha
+            comboBoxEnvironments.Items.Insert(1, "https://a1ws.xataxrs.com"); //alpha
+            comboBoxEnvironments.Items.Insert(2, "https://b1ws.xataxrs.com"); //beta
+            comboBoxEnvironments.Items.Insert(3, "https://q1ws.xataxrs.com"); //q1
+            comboBoxEnvironments.Items.Insert(4, "https://q2ws.xataxrs.com"); //q2
+            comboBoxEnvironments.Items.Insert(5, "https://usfws.xataxrs.com"); //US Foods
+            comboBoxEnvironments.Items.Insert(6, "https://rdc-prod-ws.aws.roadnet.com"); //RDC prod
+
+
             comboBoxEnvironments.SelectedIndex = 0; // defaults to production
 
 
