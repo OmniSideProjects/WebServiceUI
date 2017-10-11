@@ -122,7 +122,7 @@
             // comboBox_webService
             // 
             this.comboBox_webService.FormattingEnabled = true;
-            this.comboBox_webService.Location = new System.Drawing.Point(307, 32);
+            this.comboBox_webService.Location = new System.Drawing.Point(307, 31);
             this.comboBox_webService.Name = "comboBox_webService";
             this.comboBox_webService.Size = new System.Drawing.Size(201, 21);
             this.comboBox_webService.TabIndex = 7;
@@ -179,7 +179,7 @@
             // comboBox_Environments
             // 
             this.comboBox_Environments.FormattingEnabled = true;
-            this.comboBox_Environments.Location = new System.Drawing.Point(74, 33);
+            this.comboBox_Environments.Location = new System.Drawing.Point(74, 31);
             this.comboBox_Environments.Name = "comboBox_Environments";
             this.comboBox_Environments.Size = new System.Drawing.Size(152, 21);
             this.comboBox_Environments.TabIndex = 14;
