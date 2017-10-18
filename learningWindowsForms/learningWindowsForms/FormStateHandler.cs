@@ -32,6 +32,9 @@ namespace learningWindowsForms
         {
             _repo = new RequestRepository();
             _client = new HttpClient();
+            // Set timeout to 15 minutes
+            _client.Timeout = new TimeSpan(0, 15, 0);
+            _client.DefaultRequestHeaders.Add("Age", "1");
         }
 
         public List<Request> GetAvailableRequests()
@@ -111,7 +114,17 @@ namespace learningWindowsForms
                     {
                         if (param.PreQuery)
                         {
+                            //if (param.PreCharacters != null)
+                            //{
+                            //    requestString.Insert(0, param.PreCharacters);
+                            //}
+
                             requestString.Insert(0, param.Value);
+
+                            if (param.PostCharacters != null)
+                            {
+                                requestString.Insert((requestString.Length - 1), param.PostCharacters);
+                            }
                         }
                         else
                         {
@@ -137,7 +150,14 @@ namespace learningWindowsForms
             }
             else
             {
-                requestString.Append(uriOption.Parameters.FirstOrDefault().Value);
+                var parametersWithInput2 = uriOption.Parameters.Where(x => x.Value != "").ToList();
+
+                foreach (var param in parametersWithInput2)
+                {
+                    //requestString.Append(param.PreCharacters);
+                    requestString.Append(param.Value);
+                    requestString.Append(param.PostCharacters);
+                }
             }
 
             // prepend Uri
@@ -150,7 +170,7 @@ namespace learningWindowsForms
             return requestString.ToString();
         }
 
-        public async Task<WSResponse> SendRequestAsync(string uri, string companyLoginID, string userName, string password, string contentType)
+        public async Task<WSResponse> SendRequestAsyncXML(string uri, string companyLoginID, string userName, string password, string contentType)
         {
             WSResponse result = new WSResponse();
             //Set authorization for request
@@ -170,6 +190,7 @@ namespace learningWindowsForms
                     {
                         string resultString = await content.ReadAsStringAsync();
                         string reasonPhrase = response.ReasonPhrase;
+                        var responseTime = response.Headers.Age;
                         HttpResponseHeaders headers = response.Headers;
                         HttpStatusCode code = response.StatusCode;
 
@@ -202,6 +223,7 @@ namespace learningWindowsForms
                         result.ReasonPhase = reasonPhrase;
                         result.Headers = headers;
                         result.StatusCode = code;
+                        result.Time = responseTime.ToString();
                     }
                 }
             }

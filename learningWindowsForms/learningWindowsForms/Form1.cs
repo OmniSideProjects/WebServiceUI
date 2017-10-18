@@ -115,6 +115,7 @@ namespace learningWindowsForms
             textBox_url.Clear();
             richTextBox_displayResponse.Clear();
             label_Status_Value.Visible = false;
+            textBox_Search.Clear();
 
             //start the waiting animation
             progressBar1.Visible = true;
@@ -123,8 +124,16 @@ namespace learningWindowsForms
 
             string url = _fsh.CreateRequestUrl(_environment, _currentWebService.Name, _currentUri, parameterPanel);
             textBox_url.Text = " " + url;
+            WSResponse result = new WSResponse();
 
-            WSResponse result = await _fsh.SendRequestAsync(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text, _contentType);
+            if (_contentType == "application/xml")
+            {
+                result = await _fsh.SendRequestAsyncXML(url, textBox_companyID.Text, textBox_username.Text, textBox_password.Text, _contentType);
+            }
+            else
+            {
+
+            }
 
             progressBar1.Visible = false;
 
@@ -155,7 +164,7 @@ namespace learningWindowsForms
 
             label_Status_Value.Visible = true;
 
-            //TODO: show size of response
+            //TODO: show time and size of response
             // This is not working
             //var contentLengthHeader = result.Headers.Single(x => x.Key == "Content-Length"); 
             //label_Size_Value.Text = contentLengthHeader.Value.ToString();
@@ -178,12 +187,12 @@ namespace learningWindowsForms
             int startIndex = 0;
 
 
-            if (textSearch.Text.Length > 0 && textSearch.Text != "")
+            if (textBox_Search.Text.Length > 0 && textBox_Search.Text != "")
             {
-                startIndex = _fsh.FindMyText(textSearch.Text.Trim(), start, richTextBox_displayResponse.Text.Length, indexOfSearchText, richTextBox_displayResponse);
+                startIndex = _fsh.FindMyText(textBox_Search.Text.Trim(), start, richTextBox_displayResponse.Text.Length, indexOfSearchText, richTextBox_displayResponse);
                 if (start == 0)
                 {
-                    label_Count_Value.Text = _fsh.CountStringOccurence(richTextBox_displayResponse.Text, textSearch.Text);
+                    label_Count_Value.Text = _fsh.CountStringOccurence(richTextBox_displayResponse.Text, textBox_Search.Text);
                     label_Count_Value.Visible = true;
                     label_Count_Description.Visible = true;
                     if (label_Count_Value.Text == "0")
@@ -196,7 +205,7 @@ namespace learningWindowsForms
                 {
                     richTextBox_displayResponse.SelectionBackColor = Color.Yellow;
                     richTextBox_displayResponse.ScrollToCaret();
-                    int endIndex = textSearch.Text.Length;
+                    int endIndex = textBox_Search.Text.Length;
                     richTextBox_displayResponse.Select(startIndex, endIndex);
                     start = startIndex + endIndex;
                 }

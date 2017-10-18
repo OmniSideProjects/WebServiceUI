@@ -157,6 +157,68 @@ namespace learningWindowsForms.DAL.Repositories
 
                     }
                 },
+                //DailyDetailWebService
+                new Request()
+                {
+                    Name = "/DailyDetailWebService.svc",
+                    UriOptions = new List<UriOption>()
+                    {
+                        new UriOption()
+                        {
+                            Name = "/DailyDetail",
+                            Value = "/DailyDetail",
+                            ThereIsQuery = true,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false },
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IsActive", PreQuery = false },
+                                new Parameter() { Name = "ResourceGroupID", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                                new Parameter() { Name = "GroupBy", PreQuery = false},
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/DailyDetail/drivers/{driverId}/",
+                            Value = "/DailyDetail/drivers/",
+                            ThereIsQuery = true,
+                            Parameters = new List<Parameter>()
+                            {
+                                new Parameter() { Name = "DriverID", PreQuery = true, Required = true, PostCharacters = "/"},
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false },
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IsActive", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/DailyDetail/vehicles/{vehicleId}/",
+                            Value = "/DailyDetail/vehicles/",
+                            ThereIsQuery = true,
+                            Parameters = new List<Parameter>()
+                            {
+                                new Parameter() { Name = "VehicleID", PreQuery = true, Required = true, PostCharacters = "/"},
+                                new Parameter() { Name = "StartDate", PreQuery = false },
+                                new Parameter() { Name = "EndDate", PreQuery = false }, 
+                                new Parameter() { Name = "AsOfDateTime", PreQuery = false },
+                                new Parameter() { Name = "IsActive", PreQuery = false },
+                                new Parameter() { Name = "IncludeHistory", PreQuery = false },
+                                new Parameter() { Name = "Limit", PreQuery = false },
+                                new Parameter() { Name = "Offset", PreQuery = false },
+                            }
+                        },
+
+                    }
+                },
                 //DelayDetailReportWebService.svc
                 new Request()
                 {
@@ -721,7 +783,6 @@ namespace learningWindowsForms.DAL.Repositories
                         },
                     }
                 },
-                //TODO: Update UriOption/Database to account for Uris that have dual segments: /messsages/{MESSAGESID}/attachment/{ImageSID}
                 //MessageWebService.svc
                 new Request()
                 {
@@ -800,6 +861,30 @@ namespace learningWindowsForms.DAL.Repositories
                                 new Parameter() { Name = "MessageSID", PreQuery = true, Required = true},
                             }
                         },
+                        new UriOption()
+                        {
+                            Name = "/messsages/{MESSAGESID}/attachment/{ImageSID}",
+                            Value = "/messages/",
+                            ThereIsQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageSID", PreQuery = true, Required = true, PostCharacters = "/attachment/" },
+                                new Parameter() { Name = "ImageSID", PreQuery = true, Required = true, PostCharacters = null }
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/messsages/{MESSAGESID}/signature/{ImageSID}",
+                            Value = "/messages/",
+                            ThereIsQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "MessageSID", PreQuery = true, Required = true, PostCharacters = "/signature/" },
+                                new Parameter() { Name = "ImageSID", PreQuery = true, Required = true, PostCharacters = null }
+                            }
+                        },
+
+
                     }
                 },
                 //OperationWebService.svc
@@ -1077,7 +1162,6 @@ namespace learningWindowsForms.DAL.Repositories
                         },
                     }
                 },
-                //TODO: Update UriOption/Database to account for Uris that have dual segments: /messsages/{MESSAGESID}/attachment/{ImageSID}
                 //RouteWebService.svc
                 new Request()
                 {
@@ -1098,23 +1182,32 @@ namespace learningWindowsForms.DAL.Repositories
                                 new Parameter() { Name = "offset", PreQuery = false},
                                 new Parameter() { Name = "recurse", PreQuery = false}
                             }
-                        }
+                        },
                         //TODO: Update UriOption
-                        //new UriOption()
-                        //{
-                        //    Name = "/route/{organizationID}/{routeID}",
-                        //    Value = "/route/{organizationID}/{routeID}",
-                        //    ThereIsQuery = false,
-                        //    Parameters = new List<Parameter>
-                        //    {
-                        //        new Parameter() { Name = "organizationID", PreQuery = false},
-                        //        new Parameter() { Name = "resourceGroupID", PreQuery = false},
-                        //        new Parameter() { Name = "asOfDateTime", PreQuery = false},
-                        //        new Parameter() { Name = "limit", PreQuery = false},
-                        //        new Parameter() { Name = "offset", PreQuery = false},
-                        //        new Parameter() { Name = "recurse", PreQuery = false}
-                        //    }
-                        //},
+                        new UriOption()
+                        {
+                            Name = "/route/{organizationID}/{routeID}",
+                            Value = "/route/",
+                            ThereIsQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false, Required = true, PostCharacters = "/"},
+                                new Parameter() { Name = "RouteID", PreQuery = false, Required = true, PostCharacters = null },
+                            }
+                        },
+                        new UriOption()
+                        {
+                            Name = "/route/{organizationID}/{routeID}/tripID",
+                            Value = "/route/",
+                            ThereIsQuery = false,
+                            Parameters = new List<Parameter>
+                            {
+                                new Parameter() { Name = "OrganizationID", PreQuery = false, Required = true, PostCharacters = "/"},
+                                new Parameter() { Name = "RouteID", PreQuery = false, Required = true, PostCharacters = "/" },
+                                new Parameter() { Name = "TripID", PreQuery = false, Required = true, PostCharacters = null },
+                            }
+                        },
+
 
                     }
                 },

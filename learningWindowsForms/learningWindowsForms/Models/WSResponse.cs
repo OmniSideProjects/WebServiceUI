@@ -11,6 +11,7 @@ namespace learningWindowsForms.Models
     public class WSResponse
     {
         public string Result { get; set; }
+        public string Time { get; set; }
         public string ReasonPhase { get; set; }
         public HttpResponseHeaders Headers { get; set; }
         public HttpStatusCode StatusCode { get; set; }

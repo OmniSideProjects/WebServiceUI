@@ -56,7 +56,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textSearch = new System.Windows.Forms.TextBox();
+            this.textBox_Search = new System.Windows.Forms.TextBox();
             this.button_Search = new System.Windows.Forms.Button();
             this.label_Count_Value = new System.Windows.Forms.Label();
             this.label_Count_Description = new System.Windows.Forms.Label();
@@ -150,7 +150,7 @@
             this.comboBox_uri.FormattingEnabled = true;
             this.comboBox_uri.Location = new System.Drawing.Point(540, 31);
             this.comboBox_uri.Name = "comboBox_uri";
-            this.comboBox_uri.Size = new System.Drawing.Size(220, 21);
+            this.comboBox_uri.Size = new System.Drawing.Size(279, 21);
             this.comboBox_uri.TabIndex = 10;
             this.comboBox_uri.SelectedIndexChanged += new System.EventHandler(this.comboBox_uri_SelectedIndexChanged);
             // 
@@ -159,7 +159,7 @@
             this.button_Send.BackColor = System.Drawing.SystemColors.Highlight;
             this.button_Send.Enabled = false;
             this.button_Send.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_Send.Location = new System.Drawing.Point(766, 31);
+            this.button_Send.Location = new System.Drawing.Point(825, 31);
             this.button_Send.Name = "button_Send";
             this.button_Send.Size = new System.Drawing.Size(197, 21);
             this.button_Send.TabIndex = 11;
@@ -173,7 +173,7 @@
             this.textBox_url.Location = new System.Drawing.Point(43, 59);
             this.textBox_url.Name = "textBox_url";
             this.textBox_url.ReadOnly = true;
-            this.textBox_url.Size = new System.Drawing.Size(920, 20);
+            this.textBox_url.Size = new System.Drawing.Size(979, 20);
             this.textBox_url.TabIndex = 13;
             // 
             // comboBox_Environments
@@ -202,7 +202,7 @@
             this.richTextBox_displayResponse.Name = "richTextBox_displayResponse";
             this.richTextBox_displayResponse.ReadOnly = true;
             this.richTextBox_displayResponse.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.richTextBox_displayResponse.Size = new System.Drawing.Size(731, 501);
+            this.richTextBox_displayResponse.Size = new System.Drawing.Size(790, 501);
             this.richTextBox_displayResponse.TabIndex = 16;
             this.richTextBox_displayResponse.Text = "";
             // 
@@ -258,7 +258,7 @@
             // 
             // label_Status_Value
             // 
-            this.label_Status_Value.Location = new System.Drawing.Point(809, 88);
+            this.label_Status_Value.Location = new System.Drawing.Point(872, 88);
             this.label_Status_Value.Name = "label_Status_Value";
             this.label_Status_Value.Size = new System.Drawing.Size(150, 13);
             this.label_Status_Value.TabIndex = 24;
@@ -268,7 +268,7 @@
             // label_Status
             // 
             this.label_Status.AutoSize = true;
-            this.label_Status.Location = new System.Drawing.Point(763, 88);
+            this.label_Status.Location = new System.Drawing.Point(826, 88);
             this.label_Status.Name = "label_Status";
             this.label_Status.Size = new System.Drawing.Size(40, 13);
             this.label_Status.TabIndex = 25;
@@ -286,7 +286,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(845, 9);
+            this.label3.Location = new System.Drawing.Point(898, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 13);
             this.label3.TabIndex = 29;
@@ -295,7 +295,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(931, 9);
+            this.label4.Location = new System.Drawing.Point(993, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 13);
             this.label4.TabIndex = 30;
@@ -310,13 +310,13 @@
             this.label5.TabIndex = 31;
             this.label5.Text = "Search Data";
             // 
-            // textSearch
+            // textBox_Search
             // 
-            this.textSearch.Location = new System.Drawing.Point(307, 85);
-            this.textSearch.Name = "textSearch";
-            this.textSearch.Size = new System.Drawing.Size(131, 20);
-            this.textSearch.TabIndex = 32;
-            this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
+            this.textBox_Search.Location = new System.Drawing.Point(307, 85);
+            this.textBox_Search.Name = "textBox_Search";
+            this.textBox_Search.Size = new System.Drawing.Size(131, 20);
+            this.textBox_Search.TabIndex = 32;
+            this.textBox_Search.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
             // 
             // button_Search
             // 
@@ -331,7 +331,7 @@
             // label_Count_Value
             // 
             this.label_Count_Value.AutoSize = true;
-            this.label_Count_Value.Location = new System.Drawing.Point(537, 88);
+            this.label_Count_Value.Location = new System.Drawing.Point(525, 88);
             this.label_Count_Value.Name = "label_Count_Value";
             this.label_Count_Value.Size = new System.Drawing.Size(33, 13);
             this.label_Count_Value.TabIndex = 34;
@@ -340,7 +340,7 @@
             // label_Count_Description
             // 
             this.label_Count_Description.AutoSize = true;
-            this.label_Count_Description.Location = new System.Drawing.Point(576, 88);
+            this.label_Count_Description.Location = new System.Drawing.Point(564, 88);
             this.label_Count_Description.Name = "label_Count_Description";
             this.label_Count_Description.Size = new System.Drawing.Size(65, 13);
             this.label_Count_Description.TabIndex = 35;
@@ -351,11 +351,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(971, 621);
+            this.ClientSize = new System.Drawing.Size(1034, 621);
             this.Controls.Add(this.label_Count_Description);
             this.Controls.Add(this.label_Count_Value);
             this.Controls.Add(this.button_Search);
-            this.Controls.Add(this.textSearch);
+            this.Controls.Add(this.textBox_Search);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -421,7 +421,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textSearch;
+        private System.Windows.Forms.TextBox textBox_Search;
         private System.Windows.Forms.Button button_Search;
         private System.Windows.Forms.Label label_Count_Value;
         private System.Windows.Forms.Label label_Count_Description;
